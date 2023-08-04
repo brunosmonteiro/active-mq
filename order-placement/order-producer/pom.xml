@@ -24,6 +24,6 @@
             <artifactId>shared-resources</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
     </dependencies>
-
 </project>
