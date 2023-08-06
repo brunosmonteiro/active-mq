@@ -132,6 +132,7 @@ session.close();
 connection.close();
 ```
 
+## Code Snippet
 This is the full code snippet.
 ```
 package producer;

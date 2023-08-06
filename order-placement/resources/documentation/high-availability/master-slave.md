@@ -48,7 +48,6 @@ services:
 
 volumes:
   shared-data:
-
 ```
 This is a simple file that sets two brokers with access to the same file system.
 
@@ -143,5 +142,5 @@ With this file, haproxy treats master as the primary broker and the slave as bac
 without it, there would be a round-robin load balancing. The proxy can access both of the container's through their
 service names because docker compose provides a default network with this ability to do so.
 
-`check inter 2s` means the health is checked every two seconds.
-`fall 3` means that the proxy will be changed if there are three consecutive fails in the health check.
+- `check inter 2s` means the health is checked every two seconds.
+- `fall 3` means that the proxy will be changed if there are three consecutive fails in the health check.

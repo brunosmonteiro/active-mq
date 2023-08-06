@@ -108,7 +108,7 @@ consumer.setMessageListener(message -> {
     }
 });
 ```
-
+## Code Snippet
 This is the full code snippet.
 ```
 package consumer;
