@@ -1,0 +1,29 @@
+version: '3'
+services:
+  message-broker-master:
+    image: rmohr/activemq
+    environment:
+      - ACTIVEMQ_OPTS=-Dactivemq.brokerid=master
+    volumes:
+      - activemq-data:/data/activemq
+
+  message-broker-slave:
+    image: rmohr/activemq
+    environment:
+      - ACTIVEMQ_OPTS=-Dactivemq.brokerid=slave
+    volumes:
+      - activemq-data:/data/activemq
+
+  haproxy:
+    image: haproxy:2.3
+    depends_on:
+      - message-broker-master
+      - message-broker-slave
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - "61616:61616"
+      - "8181:8404"
+
+volumes:
+  activemq-data:

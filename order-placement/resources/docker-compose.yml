@@ -1,7 +1,0 @@
-version: '3'
-services:
-  message-broker:
-    image: rmohr/activemq
-    ports:
-      - "61616:61616"
-      - "8161:8161"

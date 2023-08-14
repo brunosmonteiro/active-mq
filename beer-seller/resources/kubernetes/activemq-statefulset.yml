@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: activemq-statefulset
+spec:
+  serviceName: "activemq-service"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: activemq
+  template:
+    metadata:
+      labels:
+        app: activemq
+    spec:
+      containers:
+        - name: activemq
+          image: rmohr/activemq
+          volumeMounts:
+            - name: activemq-data
+              mountPath: /data/activemq
+  volumeClaimTemplates:
+    - metadata:
+        name: activemq-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
