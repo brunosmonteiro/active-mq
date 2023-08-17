@@ -10,10 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>order-producer</module>
-        <module>order-consumer</module>
+        <module>inventory-consumer</module>
+        <module>inventory-service</module>
+        <module>order-service</module>
+        <module>notification-consumer</module>
         <module>shared-resources</module>
-        <module>inventory-manager</module>
     </modules>
 
     <parent>
