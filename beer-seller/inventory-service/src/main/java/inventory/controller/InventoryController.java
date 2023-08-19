@@ -4,7 +4,7 @@ import inventory.service.InventoryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shared.dto.inventory.InventoryResponseDto;
+import shared.dto.beer.InventoryResponseDto;
 import shared.mapper.InventoryMapper;
 
 import java.util.Set;

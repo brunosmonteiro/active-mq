@@ -1,11 +1,11 @@
-package inventory;
+package order;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class InventoryServiceApplication {
+public class OrderServiceApplication {
     public static void main(final String[] args) {
-        SpringApplication.run(InventoryServiceApplication.class, args);
+        SpringApplication.run(OrderServiceApplication.class, args);
     }
 }

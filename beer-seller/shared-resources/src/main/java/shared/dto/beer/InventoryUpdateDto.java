@@ -1,4 +1,4 @@
-package shared.dto.inventory;
+package shared.dto.beer;
 
 public class InventoryUpdateDto {
     private String beerId;

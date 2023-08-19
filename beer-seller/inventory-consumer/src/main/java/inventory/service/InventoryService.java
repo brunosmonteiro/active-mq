@@ -2,7 +2,7 @@ package inventory.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import shared.dto.inventory.InventoryUpdateDto;
+import shared.dto.beer.InventoryUpdateDto;
 import shared.dto.order.OrderBeerResponseDto;
 import shared.dto.order.OrderResponseDto;
 import shared.entity.inventory.Inventory;

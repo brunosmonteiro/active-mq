@@ -1,4 +1,4 @@
-package shared.dto.inventory;
+package shared.dto.beer;
 
 public class InventoryBeerDto {
     private Long id;

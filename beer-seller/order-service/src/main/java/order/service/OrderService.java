@@ -1,13 +1,13 @@
 package order.service;
 
 import jakarta.transaction.Transactional;
-import order.mapper.OrderMapper;
 import order.producer.OrderProducer;
 import order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import shared.dto.order.OrderHistoryDto;
 import shared.dto.order.OrderRequestDto;
 import shared.dto.order.OrderResponseDto;
+import shared.mapper.OrderMapper;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public record OrderService(
         return orders.stream().map(orderMapper::toOrderHistoryDto).toList();
     }
 
-    public OrderHistoryDto getOrderDetail(final Long orderNumber) {
-        return orderMapper.toOrderHistoryDto(orderRepository.getReferenceById(orderNumber));
+    public OrderResponseDto getOrderDetail(final Long orderNumber) {
+        return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
     }
 }

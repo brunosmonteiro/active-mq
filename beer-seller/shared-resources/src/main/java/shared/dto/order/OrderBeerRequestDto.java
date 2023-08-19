@@ -1,15 +1,15 @@
 package shared.dto.order;
 
 public class OrderBeerRequestDto {
-    private String beerId;
+    private Long id;
     private Integer quantity;
 
-    public String getBeerId() {
-        return beerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setBeerId(final String beerId) {
-        this.beerId = beerId;
+    public void setId(final Long id) {
+        this.id = id;
     }
 
     public Integer getQuantity() {

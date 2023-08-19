@@ -2,10 +2,12 @@ package order.config;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
 
 @Configuration
 public class JmsConfig {
@@ -19,19 +21,11 @@ public class JmsConfig {
     }
 
     @Bean
-    public JmsListenerContainerFactory<?> queueListenerFactory(final ConnectionFactory connectionFactory) {
-        final DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(false); // Set to false for queues
-        return factory;
-    }
-
-    @Bean
-    public JmsListenerContainerFactory<?> topicListenerFactory(final ConnectionFactory connectionFactory) {
-        final DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true); // Set to true for topics
-        return factory;
+    public JmsTemplate jmsTemplate(final ConnectionFactory connectionFactory){
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setPubSubDomain(true);
+        return jmsTemplate;
     }
 }
 

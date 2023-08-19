@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class InventoryManagerApplication {
+public class InventoryConsumerApplication {
     public static void main(final String[] args) {
-        SpringApplication.run(InventoryManagerApplication.class);
+        SpringApplication.run(InventoryConsumerApplication.class, args);
     }
 }

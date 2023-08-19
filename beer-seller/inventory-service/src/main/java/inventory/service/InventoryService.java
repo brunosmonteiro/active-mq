@@ -1,7 +1,7 @@
 package inventory.service;
 
 import org.springframework.stereotype.Service;
-import shared.dto.inventory.InventoryResponseDto;
+import shared.dto.beer.InventoryResponseDto;
 import shared.mapper.InventoryMapper;
 import shared.repository.InventoryRepository;
 

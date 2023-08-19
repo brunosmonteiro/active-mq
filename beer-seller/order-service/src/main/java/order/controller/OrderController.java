@@ -26,7 +26,7 @@ public record OrderController(OrderService orderService) {
     }
 
     @GetMapping("/{id}")
-    public OrderHistoryDto getOrderDetail(@PathVariable final Long orderNumber) {
+    public OrderResponseDto getOrderDetail(@PathVariable final Long orderNumber) {
         return orderService.getOrderDetail(orderNumber);
     }
 }
