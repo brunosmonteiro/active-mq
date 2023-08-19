@@ -1,5 +1,6 @@
 package shared.entity.notification;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import shared.entity.order.Order;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

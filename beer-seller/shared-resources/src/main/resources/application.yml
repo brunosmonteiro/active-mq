@@ -1,5 +1,5 @@
 hibernate:
-  dialect: org.hibernate.dialect.PostgreSQL94Dialect
+  dialect: org.hibernate.dialect.PostgreSQLDialect
 spring:
   flyway:
     enabled: true

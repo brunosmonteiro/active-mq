@@ -10,5 +10,5 @@ import shared.entity.order.Order;
 public abstract class OrderMapper extends BaseMapper<Order> {
     public abstract Order toOrder(final OrderRequestDto request);
     public abstract OrderResponseDto toOrderResponseDto(final Order order);
-    public  abstract OrderHistoryDto toOrderHistoryDto(final Order order);
+    public abstract OrderHistoryDto toOrderHistoryDto(final Order order);
 }

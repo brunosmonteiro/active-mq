@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public record InventoryService(InventoryRepository inventoryRepository, InventoryMapper inventoryMapper) {
     @Transactional
     public void updateStock(final InventoryUpdateDto update) {
-        final Inventory inventory = inventoryRepository.findByExternalId(update.getBeerId());
+        final Inventory inventory = inventoryRepository.findByBeerExternalId(update.getBeerId());
         if (inventory == null) {
             final Inventory newEntry = inventoryMapper.toInventory(update);
             inventoryRepository.save(newEntry);

@@ -2,20 +2,27 @@ package order.service;
 
 import jakarta.transaction.Transactional;
 import order.producer.OrderProducer;
-import order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import shared.dto.order.OrderHistoryDto;
 import shared.dto.order.OrderRequestDto;
 import shared.dto.order.OrderResponseDto;
 import shared.mapper.OrderMapper;
+import shared.repository.OrderRepository;
 
 import java.util.List;
 
 @Service
-public record OrderService(
-        OrderProducer orderProducer,
-        OrderMapper orderMapper,
-        OrderRepository orderRepository) {
+public class OrderService {
+    private final OrderProducer orderProducer;
+    private final OrderMapper orderMapper;
+    private final OrderRepository orderRepository;
+
+    public OrderService(OrderProducer orderProducer, OrderMapper orderMapper, OrderRepository orderRepository) {
+        this.orderProducer = orderProducer;
+        this.orderMapper = orderMapper;
+        this.orderRepository = orderRepository;
+    }
+
     @Transactional
     public OrderResponseDto createOrder(final OrderRequestDto request) {
         final var order = orderRepository.save(orderMapper.toOrder(request));
