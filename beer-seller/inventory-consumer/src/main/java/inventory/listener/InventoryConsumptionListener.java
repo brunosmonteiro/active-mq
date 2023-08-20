@@ -7,7 +7,9 @@ import shared.dto.order.OrderResponseDto;
 
 @Component
 public record InventoryConsumptionListener(InventoryService inventoryService) {
-    @JmsListener(destination = "orders-topic", containerFactory = "queueListenerFactory")
+    private static final String INVENTORY_CONSUMPTION_SUBSCRIPTION = "inventory-consumption";
+
+    @JmsListener(destination = "orders-topic", containerFactory = "topicListenerFactory", subscription = INVENTORY_CONSUMPTION_SUBSCRIPTION)
     public void receiveConsumptionUpdate(final OrderResponseDto order) {
         inventoryService.consumeStock(order);
     }

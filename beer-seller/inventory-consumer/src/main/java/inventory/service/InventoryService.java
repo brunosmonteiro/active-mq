@@ -2,7 +2,7 @@ package inventory.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import shared.dto.beer.InventoryUpdateDto;
+import shared.dto.inventory.InventoryUpdateDto;
 import shared.dto.order.OrderBeerResponseDto;
 import shared.dto.order.OrderResponseDto;
 import shared.entity.inventory.Inventory;
@@ -14,17 +14,21 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public record InventoryService(InventoryRepository inventoryRepository, InventoryMapper inventoryMapper) {
+public class InventoryService {
+    private final InventoryRepository inventoryRepository;
+
+    public InventoryService(final InventoryRepository inventoryRepository) {
+        this.inventoryRepository = inventoryRepository;
+    }
+
     @Transactional
     public void updateStock(final InventoryUpdateDto update) {
         final Inventory inventory = inventoryRepository.findByBeerExternalId(update.getBeerId());
         if (inventory == null) {
-            final Inventory newEntry = inventoryMapper.toInventory(update);
-            inventoryRepository.save(newEntry);
-        } else {
-            inventory.setQuantity(inventory.getQuantity() + update.getQuantity());
-            inventoryRepository.save(inventory);
+            throw new IllegalArgumentException();
         }
+        inventory.setQuantity(inventory.getQuantity() + update.getQuantity());
+        inventoryRepository.save(inventory);
     }
 
     @Transactional

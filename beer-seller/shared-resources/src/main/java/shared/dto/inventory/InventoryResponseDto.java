@@ -1,4 +1,6 @@
-package shared.dto.beer;
+package shared.dto.inventory;
+
+import shared.dto.inventory.InventoryBeerDto;
 
 import java.util.List;
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shared.dto.order.OrderHistoryDto;
@@ -13,14 +14,15 @@ import shared.dto.order.OrderResponseDto;
 
 import java.util.List;
 
-@RestController("/orders")
+@RestController
+@RequestMapping("/order-service")
 public record OrderController(OrderService orderService) {
-    @PostMapping
+    @PostMapping("/orders")
     public OrderResponseDto createOrder(@RequestBody final OrderRequestDto orderRequestDto) {
         return orderService.createOrder(orderRequestDto);
     }
 
-    @GetMapping
+    @GetMapping("/orders")
     public List<OrderHistoryDto> getOrderHistoryForConsumer(@RequestParam final String consumerId) {
         return orderService.getOrderHistory(consumerId);
     }

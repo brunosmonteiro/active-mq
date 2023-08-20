@@ -7,7 +7,9 @@ import shared.dto.order.OrderResponseDto;
 
 @Component
 public record SmsNotificationListener(SmsNotificationService smsNotificationService) {
-    @JmsListener(destination = "orders-topic", containerFactory = "topicListenerFactory")
+    private static final String SMS_NOTIFICATION_CONSUMER = "sms-notification";
+
+    @JmsListener(destination = "orders-topic", containerFactory = "topicListenerFactory", subscription = SMS_NOTIFICATION_CONSUMER)
     public void receiveConsumptionUpdate(final OrderResponseDto order) {
         smsNotificationService.sendSms(order);
     }

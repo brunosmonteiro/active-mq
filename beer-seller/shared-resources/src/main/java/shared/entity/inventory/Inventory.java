@@ -1,5 +1,6 @@
 package shared.entity.inventory;
 
+import jakarta.persistence.CascadeType;
 import shared.entity.beer.Beer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Beer beer;
     private Integer quantity;
 
