@@ -1,11 +1,12 @@
 package shared.entity.order;
 
-import shared.entity.beer.Beer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import shared.entity.beer.Beer;
 
 @Entity
 public class OrderBeer {
@@ -13,10 +14,20 @@ public class OrderBeer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "beer_id")
     private Beer beer;
     @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
     private Integer quantity;
+
+    public OrderBeer() {
+    }
+
+    public OrderBeer(final Beer beer, final Integer quantity) {
+        this.beer = beer;
+        this.quantity = quantity;
+    }
 
     public Long getId() {
         return id;

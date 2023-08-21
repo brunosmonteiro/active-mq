@@ -1,7 +1,5 @@
 package shared.dto.inventory;
 
-import shared.dto.inventory.InventoryBeerDto;
-
 import java.util.List;
 
 public class InventoryResponseDto {

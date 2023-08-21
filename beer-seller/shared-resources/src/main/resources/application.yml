@@ -16,3 +16,5 @@ spring:
       use-new-id-generator-mappings: false
       naming.physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show-sql: true # Optional, for logging SQL statements
+url:
+  inventory: http://localhost:8183

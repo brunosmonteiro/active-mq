@@ -7,7 +7,7 @@ import java.util.List;
 
 public class OrderResponseDto {
     private Long id;
-    private Long consumerId;
+    private String consumerId;
     private BigDecimal total;
     private List<OrderBeerResponseDto> beers;
     private OrderStatus status;
@@ -20,11 +20,11 @@ public class OrderResponseDto {
         this.id = id;
     }
 
-    public Long getConsumerId() {
+    public String getConsumerId() {
         return consumerId;
     }
 
-    public void setConsumerId(final Long consumerId) {
+    public void setConsumerId(final String consumerId) {
         this.consumerId = consumerId;
     }
 

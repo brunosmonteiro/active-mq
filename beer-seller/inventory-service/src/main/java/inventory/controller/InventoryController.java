@@ -17,9 +17,9 @@ import shared.mapper.InventoryMapper;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/inventory-service")
+@RequestMapping("/inventories")
 public record InventoryController(InventoryService inventoryService, InventoryMapper inventoryMapper) {
-    @GetMapping("/beers")
+    @GetMapping
     public InventoryResponseDto getInventory(@RequestParam final Set<Long> beerIds) {
         return inventoryService.getInventory(beerIds);
     }

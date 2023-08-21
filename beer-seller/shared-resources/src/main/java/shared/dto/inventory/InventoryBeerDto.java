@@ -1,8 +1,10 @@
 package shared.dto.inventory;
 
+import java.math.BigDecimal;
+
 public class InventoryBeerDto {
     private Long id;
-    private String name;
+    private BigDecimal price;
     private Integer quantity;
 
     public Long getId() {
@@ -13,12 +15,12 @@ public class InventoryBeerDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setPrice(final BigDecimal price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {

@@ -40,7 +40,7 @@ public class InventoryService {
             final var beerOrder = beerMap.get(inventory.getBeer().getId());
             final var newQuantity = inventory.getQuantity() - beerOrder.getQuantity();
             if (newQuantity < 0) {
-                // exception?
+                // send to DLQ by throwing an exception
             }
             inventory.setQuantity(newQuantity);
         });
