@@ -1,6 +1,8 @@
 package inventory.listener;
 
 import inventory.service.InventoryService;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import shared.dto.order.OrderResponseDto;

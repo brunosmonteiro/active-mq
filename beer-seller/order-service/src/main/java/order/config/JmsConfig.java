@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
 @Configuration
 public class JmsConfig {
@@ -21,9 +24,18 @@ public class JmsConfig {
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(final ConnectionFactory connectionFactory){
+    public MessageConverter messageConverter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate(final ConnectionFactory connectionFactory, final MessageConverter messageConverter){
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setMessageConverter(messageConverter);
         jmsTemplate.setPubSubDomain(true);
         return jmsTemplate;
     }

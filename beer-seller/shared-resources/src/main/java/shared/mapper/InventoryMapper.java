@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.TargetType;
 import shared.dto.inventory.InventoryBeerDto;
+import shared.dto.inventory.InventoryConsumptionErrorDto;
 import shared.dto.inventory.InventoryCreationDto;
 import shared.dto.inventory.InventoryResponseDto;
 import shared.dto.inventory.InventoryUpdateDto;
