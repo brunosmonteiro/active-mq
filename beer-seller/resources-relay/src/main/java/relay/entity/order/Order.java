@@ -1,4 +1,4 @@
-package shared.entity.order;
+package relay.entity.order;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import shared.entity.notification.Notification;
+import relay.entity.notification.Notification;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package shared.entity.order;
+package relay.entity.order;
 
 public enum OrderStatus {
     PLACED, DENIED;

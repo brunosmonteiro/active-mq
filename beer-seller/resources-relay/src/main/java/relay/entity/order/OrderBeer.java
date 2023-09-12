@@ -1,21 +1,33 @@
-package shared.entity.inventory;
+package relay.entity.order;
 
-import jakarta.persistence.CascadeType;
-import shared.entity.beer.Beer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import relay.entity.beer.Beer;
 
 @Entity
-public class Inventory {
+public class OrderBeer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "beer_id")
     private Beer beer;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
     private Integer quantity;
+
+    public OrderBeer() {
+    }
+
+    public OrderBeer(final Beer beer, final Integer quantity) {
+        this.beer = beer;
+        this.quantity = quantity;
+    }
 
     public Long getId() {
         return id;
@@ -31,6 +43,14 @@ public class Inventory {
 
     public void setBeer(final Beer beer) {
         this.beer = beer;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(final Order order) {
+        this.order = order;
     }
 
     public Integer getQuantity() {

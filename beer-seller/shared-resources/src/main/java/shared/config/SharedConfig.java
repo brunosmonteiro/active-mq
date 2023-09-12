@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableFeignClients(basePackages = {"shared.client"})
-@EnableJpaRepositories("shared.repository")
-@ComponentScan(basePackages = {"shared"})
-@EntityScan("shared.entity")
+//@EnableJpaRepositories("shared.repository")
+//@ComponentScan(basePackages = {"shared"})
+//@EntityScan("shared.entity")
 public class SharedConfig {
 }
 

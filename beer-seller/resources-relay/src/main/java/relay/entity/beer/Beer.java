@@ -1,4 +1,4 @@
-package shared.entity.beer;
+package relay.entity.beer;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

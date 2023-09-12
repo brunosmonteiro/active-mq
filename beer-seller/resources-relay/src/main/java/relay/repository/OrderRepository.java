@@ -1,8 +1,8 @@
-package shared.repository;
+package relay.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import shared.entity.order.Order;
+import relay.entity.order.Order;
 
 import java.util.List;
 

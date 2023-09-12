@@ -1,13 +1,13 @@
-package shared.entity.notification;
+package relay.entity.notification;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import shared.entity.order.Order;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import relay.entity.order.Order;
 
 @Entity
 public class Notification {

@@ -1,4 +1,4 @@
-package shared.entity.notification;
+package relay.entity.notification;
 
 public enum NotificationMethod {
     EMAIL, SMS

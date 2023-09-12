@@ -1,10 +1,9 @@
-package shared.repository;
+package relay.repository;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import shared.entity.inventory.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import relay.entity.inventory.Inventory;
 
 import java.util.List;
 import java.util.Set;
