@@ -5,6 +5,7 @@ import shared.dto.inventory.InventoryActionType;
 public class InventoryErrorDto {
     private InventoryActionType actionType;
     private Long beerId;
+    private Long orderId;
     private String beerExternalId;
     private Integer requestedQuantity;
     private Integer availableQuantity;
@@ -23,6 +24,14 @@ public class InventoryErrorDto {
 
     public void setBeerId(Long beerId) {
         this.beerId = beerId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(final Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getBeerExternalId() {

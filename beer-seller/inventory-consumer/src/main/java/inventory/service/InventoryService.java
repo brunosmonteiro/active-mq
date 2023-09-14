@@ -3,16 +3,13 @@ package inventory.service;
 import inventory.mapper.InventoryMapper;
 import inventory.producer.InventoryErrorProducer;
 import inventory.producer.InventoryValidatedProducer;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import shared.client.InventoryClient;
-import shared.dto.inventory.InventoryBeerConsumptionErrorDto;
+import shared.dto.inventory.InventoryActionType;
 import shared.dto.inventory.InventoryBeerDto;
-import shared.dto.inventory.InventoryConsumptionErrorDto;
-import shared.dto.inventory.update.InventoryExternalUpdateDto;
-import shared.dto.inventory.update.InventoryUpdateDto;
 import shared.dto.inventory.update.InventoryErrorDto;
+import shared.dto.inventory.update.InventoryUpdateDto;
 import shared.dto.inventory.validation.InventoryValidatedDto;
 import shared.dto.inventory.validation.InventoryValidationDto;
 import shared.dto.inventory.validation.InventoryValidationRequestDto;
@@ -20,9 +17,9 @@ import shared.dto.inventory.validation.InventoryValidationResponseDto;
 import shared.dto.inventory.validation.InventoryValidationStatus;
 import shared.dto.order.OrderBeerResponseDto;
 import shared.dto.order.OrderResponseDto;
-import shared.entity.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,24 +47,62 @@ public class InventoryService {
         this.inventoryValidatedProducer = inventoryValidatedProducer;
     }
 
-    public void updateStock(final List<InventoryExternalUpdateDto> update) {
-        final var beerExternalIds = extractBeerExternalIds(update);
-        final List<InventoryBeerDto> inventoryBeers = inventoryClient.getInventoryBeersByExternalId(beerExternalIds);
-        if (CollectionUtils.isEmpty(inventoryBeers)) {
+    public void updateStock(final List<InventoryUpdateDto> updateList) {
+        final var inventoryBeers =
+            inventoryClient.getInventoryBeersByExternalId(extractBeerExternalIds(updateList));
+        final Map<String, InventoryBeerDto> externalBeerMap = mapExternalIdsToInventoryBeers(inventoryBeers);
+        updateInventory(
+            inventoryBeers,
+            updateList,
+            inventory -> externalBeerMap.get(inventory.getBeerExternalId()),
+            InventoryActionType.STOCK_UPDATE);
+    }
+
+    public void consumeStock(final OrderResponseDto order) {
+        final var inventoryBeers =
+            inventoryClient.getInventoryBeersById(extractBeerIds(order));
+        final Map<Long, InventoryBeerDto> updateDtoMap = mapIdsToInventoryBeers(inventoryBeers);
+        updateInventory(
+            inventoryBeers,
+            getUpdateList(order),
+            inventory -> updateDtoMap.get(inventory.getBeerId()),
+            InventoryActionType.CONSUMPTION);
+    }
+
+    private void updateInventory(
+            final List<InventoryBeerDto> inventoryBeerDtoList,
+            final List<InventoryUpdateDto> inventoryUpdateDtoList,
+            final Function<InventoryUpdateDto, InventoryBeerDto> beerFunction,
+            final InventoryActionType inventoryActionType) {
+        if (CollectionUtils.isEmpty(inventoryBeerDtoList)) {
             throw new IllegalArgumentException("Inventory Beers cannot be empty.");
         }
-        final Map<String, InventoryBeerDto> externalBeerMap = mapExternalIdsToInventoryBeers(inventoryBeers);
         final List<InventoryErrorDto> errorList = new ArrayList<>();
-        final var inventoryUpdate= prepareInventoryUpdate(externalBeerMap, update, errorList);
+        final var inventoryUpdate= prepareInventoryUpdate(
+                beerFunction,
+                inventoryUpdateDtoList,
+                errorList);
         if (!errorList.isEmpty()) {
+            errorList.forEach(error -> error.setActionType(inventoryActionType));
             inventoryErrorProducer.sendMessage(errorList);
         }
         inventoryClient.updateInventories(inventoryUpdate);
     }
 
-    private Set<String> extractBeerExternalIds(final List<InventoryExternalUpdateDto> update) {
-        return update.stream()
-            .map(InventoryExternalUpdateDto::getBeerExternalId)
+    private List<InventoryUpdateDto> getUpdateList(final OrderResponseDto order) {
+        return order.getBeers().stream().map(beer ->
+            new InventoryUpdateDto(beer.getId(), beer.getQuantity())).toList();
+    }
+
+    private Set<String> extractBeerExternalIds(final List<InventoryUpdateDto> updateList) {
+        return updateList.stream()
+            .map(InventoryUpdateDto::getBeerExternalId)
+            .collect(Collectors.toSet());
+    }
+
+    private Set<Long> extractBeerIds(final OrderResponseDto orderResponseDto) {
+        return orderResponseDto.getBeers().stream()
+            .map(OrderBeerResponseDto::getId)
             .collect(Collectors.toSet());
     }
 
@@ -76,20 +111,17 @@ public class InventoryService {
             .collect(Collectors.toMap(InventoryBeerDto::getExternalId, Function.identity()));
     }
 
-    private Integer getTotalQuantity(
-            final InventoryBeerDto inventoryBeerDto,
-            final InventoryExternalUpdateDto inventoryExternalUpdateDto) {
-        return ofNullable(inventoryBeerDto)
-            .map(InventoryBeerDto::getQuantity)
-            .orElse(0) + inventoryExternalUpdateDto.getQuantity();
+    private Map<Long, InventoryBeerDto> mapIdsToInventoryBeers(final List<InventoryBeerDto> inventoryBeers) {
+        return inventoryBeers.stream()
+            .collect(Collectors.toMap(InventoryBeerDto::getId, Function.identity()));
     }
 
     private Integer getTotalQuantity(
             final InventoryBeerDto inventoryBeerDto,
-            final OrderBeerResponseDto orderBeerResponseDto) {
+            final InventoryUpdateDto inventoryExternalUpdateDto) {
         return ofNullable(inventoryBeerDto)
-                .map(InventoryBeerDto::getQuantity)
-                .orElse(0) + orderBeerResponseDto.getQuantity();
+            .map(InventoryBeerDto::getQuantity)
+            .orElse(0) + inventoryExternalUpdateDto.getQuantity();
     }
 
     public void validateStock(final InventoryValidationRequestDto request) {
@@ -142,30 +174,12 @@ public class InventoryService {
         return validated;
     }
 
-    @Transactional
-    public void consumeStock(final OrderResponseDto order) {
-        final Map<Long, OrderBeerResponseDto> beerMap =
-            order.getBeers().stream().collect(Collectors.toMap(OrderBeerResponseDto::getId, Function.identity()));
-        final var inventoryBeers = inventoryClient.getInventoryBeersById(beerMap.keySet());
-        final List<InventoryBeerConsumptionErrorDto> consumptionErrorList = new ArrayList<>();
-        final var inventoriesUpdate = prepareInventoryUpdate(beerMap, beerMap.values(), consumptionErrorList)
-        inventoryClient.updateInventories();
-    }
-
-    private void sendErrorMessage(final Inventory inventory, final OrderBeerResponseDto beerOrder, final Long orderId) {
-        final var error = new InventoryConsumptionErrorDto();
-        error.setAvailable(inventory.getQuantity());
-        error.setRequested(beerOrder.getQuantity());
-        error.setOrderId(orderId);
-        inventoryErrorProducer.sendMessage(error);
-    }
-
     private List<InventoryUpdateDto> prepareInventoryUpdate(
-            final Map<String, InventoryBeerDto> externalBeerMap,
-            final List<InventoryExternalUpdateDto> update,
+            final Function<InventoryUpdateDto, InventoryBeerDto> beerFunction,
+            final List<InventoryUpdateDto> update,
             final List<InventoryErrorDto> errorList) {
         return update.stream().map(requestBeer -> {
-            final var beer = externalBeerMap.get(requestBeer.getBeerExternalId());
+            final var beer = beerFunction.apply(requestBeer);
             final var totalQuantity = getTotalQuantity(beer, requestBeer);
             if (beer == null || totalQuantity < 0) {
                 errorList.add(inventoryMapper.toInventoryUpdateErrorDto(beer, requestBeer));
@@ -176,21 +190,4 @@ public class InventoryService {
         .filter(Objects::nonNull)
         .toList();
     }
-    private List<InventoryUpdateDto> prepareInventoryUpdate(
-            final Map<Long, InventoryBeerDto> beerMap,
-            final List<OrderBeerResponseDto> update,
-            final List<InventoryConsumptionErrorDto> errorList) {
-        return update.stream().map(requestBeer -> {
-            final var beer = beerMap.get(requestBeer.getId());
-            final var totalQuantity = getTotalQuantity(beer, requestBeer);
-            if (beer == null || totalQuantity < 0) {
-                errorList.add(inventoryMapper.toInventoryConsumptionErrorDto(beer, requestBeer));
-                return null;
-            }
-            return new InventoryUpdateDto(beer.getId(), totalQuantity);
-        })
-        .filter(Objects::nonNull)
-        .toList();
-    }
-
 }
