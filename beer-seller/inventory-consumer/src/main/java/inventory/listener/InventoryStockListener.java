@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import shared.dto.inventory.InventoryUpdateDto;
 
 @Component
-public record InventoryStockListener(InventoryService inventoryService, ObjectMapper objectMapper) {
+public record InventoryStockListener(InventoryService inventoryService) {
 
     @JmsListener(destination = "inventory-stock-queue", containerFactory = "queueListenerFactory")
     public void receiveStockUpdate(final InventoryUpdateDto update) {

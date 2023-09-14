@@ -2,10 +2,10 @@ package relay.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import relay.entity.inventory.Inventory;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.InventoryCreationDto;
 import shared.dto.inventory.InventoryResponseDto;
-import shared.entity.inventory.Inventory;
 
 import java.util.List;
 
