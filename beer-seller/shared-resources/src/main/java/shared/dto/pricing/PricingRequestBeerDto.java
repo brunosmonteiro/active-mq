@@ -1,17 +1,8 @@
-package shared.dto.inventory.validation;
+package shared.dto.pricing;
 
-public class InventoryValidationDto {
-    private Long orderId;
+public class PricingRequestBeerDto {
     private Long beerId;
     private Integer quantity;
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
-    }
 
     public Long getBeerId() {
         return beerId;

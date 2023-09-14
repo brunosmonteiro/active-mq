@@ -1,6 +1,6 @@
 package shared.dto.inventory.update;
 
-import shared.dto.inventory.InventoryActionType;
+import shared.constants.inventory.InventoryActionType;
 
 public class InventoryErrorDto {
     private InventoryActionType actionType;

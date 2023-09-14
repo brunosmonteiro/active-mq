@@ -3,13 +3,22 @@ package shared.dto.inventory.validation;
 import java.util.List;
 
 public class InventoryValidationRequestDto {
-    private List<InventoryValidationDto> validations;
+    private Long orderId;
+    private List<InventoryValidationRequestDetailDto> beers;
 
-    public List<InventoryValidationDto> getValidations() {
-        return validations;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setValidations(final List<InventoryValidationDto> validations) {
-        this.validations = validations;
+    public void setOrderId(final Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public List<InventoryValidationRequestDetailDto> getBeers() {
+        return beers;
+    }
+
+    public void setBeers(final List<InventoryValidationRequestDetailDto> beers) {
+        this.beers = beers;
     }
 }

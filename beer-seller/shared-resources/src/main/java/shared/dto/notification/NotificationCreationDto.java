@@ -1,8 +1,8 @@
 package shared.dto.notification;
 
 import jakarta.persistence.Entity;
-import shared.constants.NotificationMethod;
-import shared.constants.NotificationStatus;
+import shared.constants.notification.NotificationMethod;
+import shared.constants.notification.NotificationStatus;
 
 @Entity
 public class NotificationCreationDto {

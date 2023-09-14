@@ -1,9 +1,8 @@
-package order.config;
+package pricing.config;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
@@ -30,6 +29,14 @@ public class JmsConfig {
     }
 
     @Bean
+    public MessageConverter messageConverter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
+    }
+
+    @Bean
     public JmsListenerContainerFactory<?> queueListenerFactory(
             final ConnectionFactory connectionFactory,
             final MessageConverter messageConverter) {
@@ -42,19 +49,11 @@ public class JmsConfig {
     }
 
     @Bean
-    public MessageConverter messageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
-        return converter;
-    }
-
-    @Bean
     public JmsTemplate jmsTemplate(final ConnectionFactory connectionFactory, final MessageConverter messageConverter){
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setPubSubDomain(false);
         jmsTemplate.setMessageConverter(messageConverter);
-        jmsTemplate.setPubSubDomain(true);
         return jmsTemplate;
     }
 }

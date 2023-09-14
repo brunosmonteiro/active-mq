@@ -1,15 +1,17 @@
 package shared.dto.inventory.validation;
 
-public class InventoryValidatedDto {
-    private Long orderId;
+import shared.constants.inventory.InventoryValidationStatus;
+
+public class InventoryValidationResponseDetailDto {
+    private Long beerId;
     private InventoryValidationStatus status;
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getBeerId() {
+        return beerId;
     }
 
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
+    public void setBeerId(final Long beerId) {
+        this.beerId = beerId;
     }
 
     public InventoryValidationStatus getStatus() {

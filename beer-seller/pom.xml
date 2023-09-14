@@ -16,6 +16,7 @@
         <module>notification-consumer</module>
         <module>order-orchestrator</module>
         <module>destination-helper</module>
+        <module>pricing-consumer</module>
     </modules>
 
     <parent>

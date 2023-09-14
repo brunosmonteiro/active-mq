@@ -1,6 +1,6 @@
 package shared.dto.order;
 
-import shared.constants.OrderStatus;
+import shared.constants.order.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,7 +1,5 @@
 package shared.dto.inventory;
 
-import java.math.BigDecimal;
-
 public class InventoryBeerDto {
     private Long id;
     private Integer quantity;

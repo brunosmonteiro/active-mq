@@ -1,6 +1,6 @@
 package inventory.listener;
 
-import inventory.service.InventoryService;
+import inventory.service.InventoryUpdateService;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import shared.dto.inventory.update.InventoryUpdateDto;
@@ -8,10 +8,10 @@ import shared.dto.inventory.update.InventoryUpdateDto;
 import java.util.List;
 
 @Component
-public record InventoryStockListener(InventoryService inventoryService) {
+public record InventoryStockListener(InventoryUpdateService inventoryUpdateService) {
 
     @JmsListener(destination = "inventory-stock-queue", containerFactory = "queueListenerFactory")
     public void receiveStockUpdate(final List<InventoryUpdateDto> update) {
-        inventoryService.updateStock(update);
+        inventoryUpdateService.updateStock(update);
     }
 }
