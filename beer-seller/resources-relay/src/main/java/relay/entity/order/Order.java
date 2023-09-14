@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import relay.entity.notification.Notification;
+import shared.constants.OrderStatus;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

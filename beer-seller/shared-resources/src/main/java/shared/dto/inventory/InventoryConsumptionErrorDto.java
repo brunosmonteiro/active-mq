@@ -1,9 +1,11 @@
 package shared.dto.inventory;
 
+import java.util.List;
+
 public class InventoryConsumptionErrorDto {
     private Long orderId;
-    private Integer available;
-    private Integer requested;
+    private InventoryActionType actionType;
+    private List<InventoryBeerConsumptionErrorDto> beerConsumption;
 
     public Long getOrderId() {
         return orderId;
@@ -13,19 +15,19 @@ public class InventoryConsumptionErrorDto {
         this.orderId = orderId;
     }
 
-    public Integer getAvailable() {
-        return available;
+    public InventoryActionType getActionType() {
+        return actionType;
     }
 
-    public void setAvailable(final Integer available) {
-        this.available = available;
+    public void setActionType(final InventoryActionType actionType) {
+        this.actionType = actionType;
     }
 
-    public Integer getRequested() {
-        return requested;
+    public List<InventoryBeerConsumptionErrorDto> getBeerConsumption() {
+        return beerConsumption;
     }
 
-    public void setRequested(final Integer requested) {
-        this.requested = requested;
+    public void setBeerConsumption(final List<InventoryBeerConsumptionErrorDto> beerConsumption) {
+        this.beerConsumption = beerConsumption;
     }
 }

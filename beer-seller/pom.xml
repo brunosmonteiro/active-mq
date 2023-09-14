@@ -11,12 +11,11 @@
 
     <modules>
         <module>shared-resources</module>
-        <module>inventory-consumer</module>
-        <module>inventory-service</module>
-        <module>order-orchestrator</module>
-        <module>notification-consumer</module>
-        <module>destination-helper</module>
         <module>resources-relay</module>
+        <module>inventory-consumer</module>
+        <module>notification-consumer</module>
+        <module>order-orchestrator</module>
+        <module>destination-helper</module>
     </modules>
 
     <parent>

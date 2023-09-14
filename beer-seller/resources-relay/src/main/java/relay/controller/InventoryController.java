@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import relay.mapper.InventoryMapper;
 import relay.repository.InventoryRepository;
+import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.InventoryCreationDto;
-import shared.dto.inventory.InventoryResponseDto;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -22,8 +23,8 @@ public record InventoryController(
         InventoryRepository inventoryRepository) {
 
     @GetMapping
-    public InventoryResponseDto getInventory(@RequestParam final Set<Long> beerIds) {
-        return inventoryMapper.toInventoryResponseDto(inventoryRepository.findByBeerIds(beerIds));
+    public List<InventoryBeerDto> getInventoryBeers(@RequestParam final Set<Long> beerIds) {
+        return inventoryMapper.toInventoryBeerDtoList(inventoryRepository.findByBeerIds(beerIds));
     }
 
     @PostMapping

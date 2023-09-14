@@ -5,7 +5,6 @@ import org.mapstruct.Mapping;
 import relay.entity.inventory.Inventory;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.InventoryCreationDto;
-import shared.dto.inventory.InventoryResponseDto;
 
 import java.util.List;
 
@@ -16,7 +15,5 @@ public interface InventoryMapper {
     @Mapping(target = "price", source = "beer.price")
     InventoryBeerDto toInventoryBeerDto(final Inventory inventory);
 
-    default InventoryResponseDto toInventoryResponseDto(final List<Inventory> inventories) {
-        return new InventoryResponseDto(inventories.stream().map(this::toInventoryBeerDto).toList());
-    }
+    List<InventoryBeerDto> toInventoryBeerDtoList(final List<Inventory> inventories);
 }

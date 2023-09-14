@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class InventoryBeerDto {
     private Long id;
-    private BigDecimal price;
     private Integer quantity;
+    private String externalId;
 
     public Long getId() {
         return id;
@@ -15,19 +15,19 @@ public class InventoryBeerDto {
         this.id = id;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
 
     public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(final String externalId) {
+        this.externalId = externalId;
     }
 }

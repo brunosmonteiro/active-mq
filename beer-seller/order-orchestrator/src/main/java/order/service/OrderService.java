@@ -5,7 +5,6 @@ import order.producer.OrderProducer;
 import org.springframework.stereotype.Service;
 import shared.client.InventoryClient;
 import shared.dto.inventory.InventoryBeerDto;
-import shared.dto.inventory.InventoryResponseDto;
 import shared.dto.order.OrderBeerRequestDto;
 import shared.dto.order.OrderHistoryDto;
 import shared.dto.order.OrderRequestDto;
@@ -46,7 +45,7 @@ public class OrderService {
     public OrderResponseDto createOrder(final OrderRequestDto request) {
         final var order = mapOrder(request);
         final var beerIds = request.getBeers().stream().map(OrderBeerRequestDto::getId).collect(Collectors.toSet());
-        final var inventory = inventoryClient.getInventory(beerIds);
+        final var inventory = inventoryClient.getInventoryBeers(beerIds);
         order.setTotal(getTotal(order, inventory));
         order.setStatus(OrderStatus.PLACED);
         orderRepository.save(order);
@@ -65,8 +64,8 @@ public class OrderService {
         return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
     }
 
-    private BigDecimal getTotal(final Order order, final InventoryResponseDto inventory) {
-        final var beerMap = inventory.getBeers().stream().collect(
+    private BigDecimal getTotal(final Order order, final List<InventoryBeerDto> beers) {
+        final var beerMap = beers.stream().collect(
             Collectors.toMap(InventoryBeerDto::getId, InventoryBeerDto::getPrice));
 
         return order.getBeers().stream()
