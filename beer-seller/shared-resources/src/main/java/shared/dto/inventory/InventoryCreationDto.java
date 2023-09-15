@@ -1,15 +1,22 @@
 package shared.dto.inventory;
 
-import shared.dto.beer.BeerDto;
-
 public class InventoryCreationDto {
-    private BeerDto beer;
+    private Long beerId;
+    private Integer quantity;
 
-    public BeerDto getBeer() {
-        return beer;
+    public Long getBeerId() {
+        return beerId;
     }
 
-    public void setBeer(final BeerDto beer) {
-        this.beer = beer;
+    public void setBeerId(final Long beerId) {
+        this.beerId = beerId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(final Integer quantity) {
+        this.quantity = quantity;
     }
 }

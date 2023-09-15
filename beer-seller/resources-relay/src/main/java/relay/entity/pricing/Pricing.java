@@ -1,6 +1,5 @@
-package relay.entity.inventory;
+package relay.entity.pricing;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,21 +7,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import relay.entity.beer.Beer;
 
+import java.math.BigDecimal;
+
 @Entity
-public class Inventory {
+public class Pricing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Beer beer;
-    private Integer quantity;
+    private BigDecimal unitPrice;
 
-    public Inventory() {
+    public Pricing() {
     }
 
-    public Inventory(final Beer beer, final Integer quantity) {
+    public Pricing(final Beer beer, final BigDecimal unitPrice) {
         this.beer = beer;
-        this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 
     public Long getId() {
@@ -41,11 +42,11 @@ public class Inventory {
         this.beer = beer;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
+    public void setUnitPrice(final BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 }

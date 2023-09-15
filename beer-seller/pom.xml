@@ -17,6 +17,8 @@
         <module>order-orchestrator</module>
         <module>destination-helper</module>
         <module>pricing-consumer</module>
+        <module>beer-consumer</module>
+        <module>error-consumer</module>
     </modules>
 
     <parent>

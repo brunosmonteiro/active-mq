@@ -1,6 +1,6 @@
-package shared.dto.pricing;
+package shared.dto.pricing.calculation;
 
-public class PricingRequestBeerDto {
+public class PricingCalculationRequestBeerDto {
     private Long beerId;
     private Integer quantity;
 

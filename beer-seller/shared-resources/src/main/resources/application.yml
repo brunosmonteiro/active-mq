@@ -18,3 +18,5 @@ spring:
     show-sql: true # Optional, for logging SQL statements
 url:
   inventory: http://localhost:8183
+  pricing: http://localhost:8184
+  beer: http://localhost:8185

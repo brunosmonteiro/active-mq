@@ -95,14 +95,6 @@ public record InventoryUpdateService(
             .collect(Collectors.toMap(InventoryBeerDto::getId, Function.identity()));
     }
 
-    private Integer getTotalQuantity(
-            final InventoryBeerDto inventoryBeerDto,
-            final InventoryUpdateDto inventoryExternalUpdateDto) {
-        return ofNullable(inventoryBeerDto)
-            .map(InventoryBeerDto::getQuantity)
-            .orElse(0) + inventoryExternalUpdateDto.getQuantity();
-    }
-
     private List<InventoryUpdateDto> prepareInventoryUpdate(
             final Function<InventoryUpdateDto, InventoryBeerDto> beerFunction,
             final List<InventoryUpdateDto> update,
@@ -118,5 +110,13 @@ public record InventoryUpdateService(
         })
         .filter(Objects::nonNull)
         .toList();
+    }
+
+    private Integer getTotalQuantity(
+            final InventoryBeerDto inventoryBeerDto,
+            final InventoryUpdateDto inventoryExternalUpdateDto) {
+        return ofNullable(inventoryBeerDto)
+            .map(InventoryBeerDto::getQuantity)
+            .orElse(0) + inventoryExternalUpdateDto.getQuantity();
     }
 }

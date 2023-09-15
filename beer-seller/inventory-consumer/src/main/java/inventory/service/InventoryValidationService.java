@@ -7,6 +7,7 @@ import shared.constants.inventory.InventoryValidationStatus;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.validation.InventoryValidationRequestDetailDto;
 import shared.dto.inventory.validation.InventoryValidationRequestDto;
+import shared.dto.inventory.validation.InventoryValidationResponseDetailDto;
 import shared.dto.inventory.validation.InventoryValidationResponseDto;
 
 import java.util.List;
@@ -33,18 +34,13 @@ public record InventoryValidationService(
     private InventoryValidationResponseDto getValidation(
             final InventoryValidationRequestDto request,
             final List<InventoryBeerDto> inventoryBeers) {
-        final Map<Long, InventoryValidationRequestDetailDto> requestMap = buildRequestMap(request);
+        final Map<Long, InventoryValidationRequestDetailDto> requestMap = buildRequestMap(request.getBeers());
         final Map<Long, Integer> beerInventoryMap = buildBeerInventoryMap(inventoryBeers);
-        return validateInventory(requestMap, beerInventoryMap);
+        return new InventoryValidationResponseDto(
+            request.getOrderId(), validateInventory(requestMap, beerInventoryMap));
     }
 
-    private Map<Long, Integer> buildBeerInventoryMap(final List<InventoryBeerDto> inventoryBeers) {
-        return inventoryBeers
-            .stream()
-            .collect(Collectors.toMap(InventoryBeerDto::getId, InventoryBeerDto::getQuantity));
-    }
-
-    private List<InventoryValidationResponseDto> validateInventory(
+    private List<InventoryValidationResponseDetailDto> validateInventory(
             final Map<Long, InventoryValidationRequestDetailDto> requestMap,
             final Map<Long, Integer> beerInventoryMap) {
         return requestMap.values()
@@ -53,20 +49,32 @@ public record InventoryValidationService(
             .toList();
     }
 
-    private InventoryValidationResponseDto buildInventoryValidatedDto(
+    private InventoryValidationResponseDetailDto buildInventoryValidatedDto(
             final InventoryValidationRequestDetailDto requestBeer,
             final Map<Long, Integer> beerInventoryMap) {
-        final var validated = new InventoryValidationResponseDto();
-        Integer beerQuantity = ofNullable(beerInventoryMap.get(requestBeer.getBeerId())).orElse(0);
-        validated.setOrderId(requestBeer.getOrderId());
-        validated.setStatus(beerQuantity < requestBeer.getQuantity() ?
-            InventoryValidationStatus.INVALID :
-            InventoryValidationStatus.VALID);
-        return validated;
+        final var validationDetailResponse = new InventoryValidationResponseDetailDto();
+        final var beerQuantity = ofNullable(beerInventoryMap.get(requestBeer.getBeerId())).orElse(0);
+        InventoryValidationStatus status;
+        if (beerQuantity == 0) {
+            status = InventoryValidationStatus.COMPLETELY_MISSING;
+        } else if (beerQuantity < requestBeer.getQuantity()) {
+            status = InventoryValidationStatus.PARTIALLY_MISSING;
+        } else {
+            status = InventoryValidationStatus.VALID;
+        }
+        validationDetailResponse.setStatus(status);
+        return validationDetailResponse;
     }
 
-    private Map<Long, InventoryValidationRequestDetailDto> buildRequestMap(final List<InventoryValidationRequestDetailDto> request) {
+    private Map<Long, InventoryValidationRequestDetailDto> buildRequestMap(
+            final List<InventoryValidationRequestDetailDto> request) {
         return request.stream()
             .collect(Collectors.toMap(InventoryValidationRequestDetailDto::getBeerId, Function.identity()));
+    }
+
+    private Map<Long, Integer> buildBeerInventoryMap(final List<InventoryBeerDto> inventoryBeers) {
+        return inventoryBeers
+            .stream()
+            .collect(Collectors.toMap(InventoryBeerDto::getId, InventoryBeerDto::getQuantity));
     }
 }

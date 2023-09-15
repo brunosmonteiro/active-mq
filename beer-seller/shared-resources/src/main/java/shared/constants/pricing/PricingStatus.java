@@ -1,4 +1,5 @@
 package shared.constants.pricing;
 
-public class PricingStatus {
+public enum PricingStatus {
+    VALID, INVALID
 }

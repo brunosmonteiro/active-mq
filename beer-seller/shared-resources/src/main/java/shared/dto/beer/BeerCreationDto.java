@@ -1,12 +1,9 @@
 package shared.dto.beer;
 
-import java.math.BigDecimal;
-
-public class BeerDto {
+public class BeerCreationDto {
     private String externalId;
     private String name;
     private String description;
-    private BigDecimal price;
 
     public String getExternalId() {
         return externalId;
@@ -30,13 +27,5 @@ public class BeerDto {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }

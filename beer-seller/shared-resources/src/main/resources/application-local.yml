@@ -6,3 +6,5 @@ spring:
     driverClassName: org.postgresql.Driver
 url:
   inventory: http://localhost:8183
+  pricing: http://localhost:8184
+  beer: http://localhost:8185

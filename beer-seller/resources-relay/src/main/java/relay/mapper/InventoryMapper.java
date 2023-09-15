@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface InventoryMapper {
-    Inventory toInventory(final InventoryCreationDto inventoryDto);
+    List<Inventory> toInventoryList(final List<InventoryCreationDto> inventoryDtoList);
 
     @Mapping(target = "price", source = "beer.price")
     InventoryBeerDto toInventoryBeerDto(final Inventory inventory);

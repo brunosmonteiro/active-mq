@@ -15,7 +15,6 @@ public class Beer {
     private String externalId;
     private String name;
     private String description;
-    private BigDecimal price;
 
     public Long getId() {
         return id;
@@ -47,13 +46,5 @@ public class Beer {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
     }
 }
