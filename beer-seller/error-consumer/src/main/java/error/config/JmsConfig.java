@@ -1,4 +1,4 @@
-package notification.config;
+package error.config;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;

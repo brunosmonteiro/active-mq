@@ -3,17 +3,24 @@ package relay.controller;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import relay.mapper.NotificationMapper;
 import relay.repository.NotificationRepository;
 import relay.repository.OrderRepository;
+import shared.client.NotificationClient;
 import shared.dto.notification.NotificationCreationDto;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notifications")
-public class NotificationController {
+public class NotificationController implements NotificationClient {
     private final NotificationMapper notificationMapper;
     private final NotificationRepository notificationRepository;
     private final OrderRepository orderRepository;
@@ -27,12 +34,17 @@ public class NotificationController {
         this.orderRepository = orderRepository;
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public void createNotification(final NotificationCreationDto notificationCreationDto) {
-        final var notification = notificationMapper.toNotification(notificationCreationDto);
-        notification.setOrder(orderRepository.findByOrderId(notificationCreationDto.getOrderId()));
-        notificationRepository.save(notification);
+    public void createNotifications(
+            @RequestBody final List<NotificationCreationDto> notificationCreationDtoList) {
+        final var notifications = notificationCreationDtoList.stream().map(notificationCreationDto -> {
+            final var notification = notificationMapper.toNotification(notificationCreationDto);
+            notification.setOrder(orderRepository.findByOrderId(notificationCreationDto.getOrderId()));
+            return notification;
+        }).toList();
+        notificationRepository.saveAll(notifications);
     }
 }
