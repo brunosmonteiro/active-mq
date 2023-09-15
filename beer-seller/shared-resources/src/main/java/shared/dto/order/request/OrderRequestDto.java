@@ -1,4 +1,4 @@
-package shared.dto.order;
+package shared.dto.order.request;
 
 import java.util.List;
 

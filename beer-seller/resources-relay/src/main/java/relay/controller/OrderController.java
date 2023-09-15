@@ -3,7 +3,6 @@ package relay.controller;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +14,15 @@ import relay.entity.order.OrderBeer;
 import relay.mapper.OrderMapper;
 import relay.repository.BeerRepository;
 import relay.repository.OrderRepository;
-import shared.dto.order.OrderHistoryDto;
-import shared.dto.order.OrderRequestDto;
-import shared.dto.order.OrderResponseDto;
+import shared.client.OrderClient;
+import shared.dto.order.history.OrderHistoryDto;
+import shared.dto.order.creation.OrderCreationDto;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-public class OrderController {
+public class OrderController implements OrderClient {
     private final OrderRepository orderRepository;
     private final BeerRepository beerRepository;
     private final OrderMapper orderMapper;
@@ -37,11 +36,12 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public void createOrder(@RequestBody final OrderRequestDto orderRequestDto) {
-        orderRepository.save(mapOrder(orderRequestDto));
+    public void createOrder(@RequestBody OrderCreationDto orderCreationDto) {
+        orderRepository.save(mapOrder(orderCreationDto));
     }
 
     @GetMapping("/orders")
@@ -50,17 +50,17 @@ public class OrderController {
         return orders.stream().map(orderMapper::toOrderHistoryDto).toList();
     }
 
-    @GetMapping("/{id}")
-    public OrderResponseDto getOrderDetail(@PathVariable final Long orderNumber) {
-        return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
-    }
+//    @GetMapping("/{id}")
+//    public OrderResponseDto getOrderDetail(@PathVariable final Long orderNumber) {
+//        return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
+//    }
 
-    private Order mapOrder(final OrderRequestDto orderRequest) {
+    private Order mapOrder(final OrderCreationDto orderCreationDto) {
         final var order = new Order();
-        order.setConsumerId(orderRequest.getConsumerId());
-        orderRequest.getBeers().forEach(requestBeer -> {
-            final var beer = beerRepository.findById(requestBeer.getId()).orElseThrow();
-            order.addOrderBeer(new OrderBeer(beer, requestBeer.getQuantity()));
+        order.setConsumerId(orderCreationDto.getConsumerId());
+        orderCreationDto.getBeers().forEach(orderBeer -> {
+            final var beer = beerRepository.findById(orderBeer.getBeerId()).orElseThrow();
+            order.addOrderBeer(new OrderBeer(beer, orderBeer.getQuantity(), orderBeer.getStatus()));
         });
         return order;
     }

@@ -37,7 +37,10 @@ public record InventoryValidationService(
         final Map<Long, InventoryValidationRequestDetailDto> requestMap = buildRequestMap(request.getBeers());
         final Map<Long, Integer> beerInventoryMap = buildBeerInventoryMap(inventoryBeers);
         return new InventoryValidationResponseDto(
-            request.getOrderId(), validateInventory(requestMap, beerInventoryMap));
+            request.getOrderId(),
+            request.getConsumerId(),
+            validateInventory(requestMap, beerInventoryMap)
+        );
     }
 
     private List<InventoryValidationResponseDetailDto> validateInventory(
@@ -52,11 +55,11 @@ public record InventoryValidationService(
     private InventoryValidationResponseDetailDto buildInventoryValidatedDto(
             final InventoryValidationRequestDetailDto requestBeer,
             final Map<Long, Integer> beerInventoryMap) {
-        final var validationDetailResponse = new InventoryValidationResponseDetailDto();
+        final var validationDetailResponse = new InventoryValidationResponseDetailDto(requestBeer.getBeerId());
         final var beerQuantity = ofNullable(beerInventoryMap.get(requestBeer.getBeerId())).orElse(0);
         InventoryValidationStatus status;
         if (beerQuantity == 0) {
-            status = InventoryValidationStatus.COMPLETELY_MISSING;
+            status = InventoryValidationStatus.MISSING;
         } else if (beerQuantity < requestBeer.getQuantity()) {
             status = InventoryValidationStatus.PARTIALLY_MISSING;
         } else {

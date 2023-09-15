@@ -1,5 +1,5 @@
 package shared.constants.order;
 
 public enum OrderStatus {
-    PLACED, DENIED;
+    PARTIALLY_PLACED, PLACED, DENIED;
 }

@@ -3,7 +3,6 @@ package inventory.listener;
 import inventory.service.InventoryUpdateService;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-import shared.dto.order.OrderResponseDto;
 
 @Component
 public record InventoryConsumptionListener(InventoryUpdateService inventoryUpdateService) {

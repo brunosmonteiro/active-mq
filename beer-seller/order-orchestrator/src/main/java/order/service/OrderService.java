@@ -1,85 +1,77 @@
 package order.service;
 
-import jakarta.transaction.Transactional;
+import order.dto.OrderProcessedBeerDto;
+import order.dto.OrderProcessedDto;
+import order.producer.InventoryValidationProducer;
 import order.producer.OrderProducer;
+import order.producer.PricingCalculationProducer;
 import org.springframework.stereotype.Service;
-import shared.client.InventoryClient;
-import shared.dto.inventory.InventoryBeerDto;
-import shared.dto.order.OrderBeerRequestDto;
-import shared.dto.order.OrderHistoryDto;
-import shared.dto.order.OrderRequestDto;
-import shared.dto.order.OrderResponseDto;
-import shared.entity.order.Order;
-import shared.entity.order.OrderBeer;
-import shared.entity.order.OrderStatus;
-import shared.mapper.OrderMapper;
-import shared.repository.BeerRepository;
-import shared.repository.OrderRepository;
+import shared.client.OrderClient;
+import shared.constants.OrderBeerStatus;
+import shared.constants.inventory.InventoryValidationStatus;
+import shared.constants.order.OrderStatus;
+import shared.constants.pricing.PricingStatus;
+import shared.dto.order.creation.OrderBeerCreationDto;
+import shared.dto.order.creation.OrderCreationDto;
+import shared.dto.order.request.OrderRequestDto;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class OrderService {
-    private final OrderProducer orderProducer;
-    private final OrderMapper orderMapper;
-    private final OrderRepository orderRepository;
-    private final InventoryClient inventoryClient;
-    private final BeerRepository beerRepository;
+public record OrderService(
+        PricingCalculationProducer pricingCalculationProducer,
+        InventoryValidationProducer inventoryValidationProducer,
+        OrderProducer orderProducer,
+        OrderClient orderClient) {
 
-    public OrderService(
-            final OrderProducer orderProducer,
-            final OrderMapper orderMapper,
-            final OrderRepository orderRepository,
-            final InventoryClient inventoryClient,
-            final BeerRepository beerRepository) {
-        this.orderProducer = orderProducer;
-        this.orderMapper = orderMapper;
-        this.orderRepository = orderRepository;
-        this.inventoryClient = inventoryClient;
-        this.beerRepository = beerRepository;
+    public void processOrder(final OrderRequestDto request) {
+//        inventoryValidationProducer.sendValidationRequest();
+//        pricingCalculationProducer.sendCalculationRequest();
     }
 
-    @Transactional
-    public OrderResponseDto createOrder(final OrderRequestDto request) {
-        final var order = mapOrder(request);
-        final var beerIds = request.getBeers().stream().map(OrderBeerRequestDto::getId).collect(Collectors.toSet());
-        final var inventory = inventoryClient.getInventoryBeers(beerIds);
-        order.setTotal(getTotal(order, inventory));
-        order.setStatus(OrderStatus.PLACED);
-        orderRepository.save(order);
-
-        final var response = orderMapper.toOrderResponseDto(order);
-        orderProducer.sendOrder(response);
-        return response;
+    public void createOrder(final OrderProcessedDto orderProcessedDto) {
+        final var orderCreation = new OrderCreationDto();
+        orderCreation.setOrderId(orderProcessedDto.getOrderId());
+        orderCreation.setConsumerId(orderProcessedDto.getConsumerId());
+        orderCreation.setTotalPrice(orderProcessedDto.getTotalPrice());
+        orderCreation.setBeers(getOrderBeers(orderProcessedDto.getBeers()));
+        orderCreation.setStatus(getOrderStatus(orderCreation.getBeers()));
+        orderClient.createOrder(orderCreation);
+//        orderProducer.sendOrder();
     }
 
-    public List<OrderHistoryDto> getOrderHistory(final String consumerId) {
-        final var orders = orderRepository.findByConsumerId(consumerId);
-        return orders.stream().map(orderMapper::toOrderHistoryDto).toList();
+    private List<OrderBeerCreationDto> getOrderBeers(final List<OrderProcessedBeerDto> beers) {
+        return beers.stream().map(beer -> {
+            final var orderBeer = new OrderBeerCreationDto();
+            orderBeer.setBeerId(beer.getBeerId());
+            orderBeer.setQuantity(beer.getQuantity());
+            orderBeer.setStatus(getBeerStatus(beer));
+            return orderBeer;
+        }).toList();
     }
 
-    public OrderResponseDto getOrderDetail(final Long orderNumber) {
-        return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
+    private OrderBeerStatus getBeerStatus(final OrderProcessedBeerDto beer) {
+        if (PricingStatus.INVALID.equals(beer.getPricingStatus())
+                && InventoryValidationStatus.MISSING.equals(beer.getInventoryStatus())) {
+            return OrderBeerStatus.MULTI_FAIL;
+        } else if (PricingStatus.INVALID.equals(beer.getPricingStatus())) {
+            return OrderBeerStatus.PRICING_FAIL;
+        } else if (InventoryValidationStatus.MISSING.equals(beer.getInventoryStatus())) {
+            return OrderBeerStatus.INVENTORY_UNAVAILABLE;
+        } else if (InventoryValidationStatus.PARTIALLY_MISSING.equals(beer.getInventoryStatus())) {
+            return OrderBeerStatus.INVENTORY_INCOMPLETE;
+        }
+        return OrderBeerStatus.VALID;
     }
 
-    private BigDecimal getTotal(final Order order, final List<InventoryBeerDto> beers) {
-        final var beerMap = beers.stream().collect(
-            Collectors.toMap(InventoryBeerDto::getId, InventoryBeerDto::getPrice));
-
-        return order.getBeers().stream()
-            .map(b -> beerMap.get(b.getBeer().getId()).multiply(BigDecimal.valueOf(b.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private Order mapOrder(final OrderRequestDto orderRequest) {
-        final var order = new Order();
-        order.setConsumerId(orderRequest.getConsumerId());
-        orderRequest.getBeers().forEach(requestBeer -> {
-            final var beer = beerRepository.findById(requestBeer.getId()).orElseThrow();
-            order.addOrderBeer(new OrderBeer(beer, requestBeer.getQuantity()));
-        });
-        return order;
+    private OrderStatus getOrderStatus(final List<OrderBeerCreationDto> beers) {
+        final var allStatuses = beers.stream().map(OrderBeerCreationDto::getStatus).toList();
+        if (allStatuses.stream().allMatch(OrderBeerStatus::isInvalid)) {
+            return OrderStatus.DENIED;
+        } else if (allStatuses.stream().allMatch(OrderBeerStatus::isIncomplete)) {
+            return OrderStatus.PARTIALLY_PLACED;
+        } else {
+            return OrderStatus.PLACED;
+        }
     }
 }

@@ -2,7 +2,7 @@ package destination.producer;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
-import shared.dto.order.OrderRequestDto;
+import shared.dto.order.request.OrderRequestDto;
 
 @Component
 public record OrderProducer(JmsTemplate jmsTemplate) {

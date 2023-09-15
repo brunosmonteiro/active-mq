@@ -9,8 +9,6 @@ import shared.constants.inventory.InventoryActionType;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.update.InventoryErrorDto;
 import shared.dto.inventory.update.InventoryUpdateDto;
-import shared.dto.order.OrderBeerResponseDto;
-import shared.dto.order.OrderResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;

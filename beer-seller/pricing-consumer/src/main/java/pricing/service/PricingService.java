@@ -4,13 +4,11 @@ import org.springframework.stereotype.Service;
 import pricing.producer.PricingValidatedProducer;
 import shared.client.PricingClient;
 import shared.constants.pricing.PricingStatus;
+import shared.dto.pricing.PricingInfoResponseDto;
 import shared.dto.pricing.calculation.PricingCalculationRequestBeerDto;
 import shared.dto.pricing.calculation.PricingCalculationRequestDto;
 import shared.dto.pricing.calculation.PricingCalculationResponseBeerDto;
 import shared.dto.pricing.calculation.PricingCalculationResponseDto;
-import shared.dto.pricing.error.PricingErrorDetailDto;
-import shared.dto.pricing.error.PricingErrorDto;
-import shared.dto.pricing.PricingInfoResponseDto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,8 +30,9 @@ public record PricingService(
         pricingValidatedProducer.sendMessage(
             new PricingCalculationResponseDto(
                 request.getOrderId(),
-                getTotalPrice(request.getBeers(), pricingMap),
-                getBeerCalculation(request, pricingMap)
+                request.getConsumerId(),
+                getBeerCalculation(request, pricingMap),
+                getTotalPrice(request.getBeers(), pricingMap)
             )
         );
     }
@@ -73,7 +72,6 @@ public record PricingService(
             }
             return new PricingCalculationResponseBeerDto(
                 beer.getBeerId(),
-                beer.getQuantity(),
                 status,
                 ofNullable(pricingBeer).map(PricingInfoResponseDto::getUnitPrice).orElse(null));
         })

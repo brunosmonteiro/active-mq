@@ -7,7 +7,6 @@ import shared.constants.notification.NotificationMethod;
 import shared.constants.notification.NotificationStatus;
 import shared.dto.notification.NotificationCreationDto;
 import shared.dto.notification.NotificationErrorDto;
-import shared.dto.order.OrderResponseDto;
 
 import java.util.Arrays;
 
