@@ -37,7 +37,7 @@ public record InventoryValidationService(
         final Map<Long, InventoryValidationRequestDetailDto> requestMap = buildRequestMap(request.getBeers());
         final Map<Long, Integer> beerInventoryMap = buildBeerInventoryMap(inventoryBeers);
         return new InventoryValidationResponseDto(
-            request.getOrderId(),
+            request.getOrderAggregationId(),
             request.getConsumerId(),
             validateInventory(requestMap, beerInventoryMap)
         );

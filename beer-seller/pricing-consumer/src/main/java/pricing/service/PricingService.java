@@ -29,7 +29,7 @@ public record PricingService(
         final Map<Long, PricingInfoResponseDto> pricingMap = mapIdsToPricingInfoResponseDto(pricing);
         pricingValidatedProducer.sendMessage(
             new PricingCalculationResponseDto(
-                request.getOrderId(),
+                request.getOrderAggregationId(),
                 request.getConsumerId(),
                 getBeerCalculation(request, pricingMap),
                 getTotalPrice(request.getBeers(), pricingMap)

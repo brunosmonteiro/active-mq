@@ -12,7 +12,6 @@ import java.util.List;
 public interface InventoryMapper {
     List<Inventory> toInventoryList(final List<InventoryCreationDto> inventoryDtoList);
 
-    @Mapping(target = "price", source = "beer.price")
     InventoryBeerDto toInventoryBeerDto(final Inventory inventory);
 
     List<InventoryBeerDto> toInventoryBeerDtoList(final List<Inventory> inventories);

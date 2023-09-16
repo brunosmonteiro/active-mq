@@ -10,11 +10,11 @@ public class PricingCalculationResponseDto extends OrderOrchestrationPartDto {
     private BigDecimal totalPrice;
 
     public PricingCalculationResponseDto(
-            final Long orderId,
+            final String orderAggregationId,
             final String consumerId,
             final List<? extends OrderBeerOrchestrationPart> beers,
             final BigDecimal totalPrice) {
-        super(orderId, consumerId, beers);
+        super(orderAggregationId, consumerId, beers);
         this.totalPrice = totalPrice;
     }
 

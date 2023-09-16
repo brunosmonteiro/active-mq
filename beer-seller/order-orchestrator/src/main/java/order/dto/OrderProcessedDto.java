@@ -6,17 +6,17 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderProcessedDto {
-    private Long orderId;
+    private String orderAggregationId;
     private String consumerId;
     private BigDecimal totalPrice;
     private List<OrderProcessedBeerDto> beers;
 
-    public Long getOrderId() {
-        return orderId;
+    public String getOrderAggregationId() {
+        return orderAggregationId;
     }
 
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
+    public void setOrderAggregationId(final String orderAggregationId) {
+        this.orderAggregationId = orderAggregationId;
     }
 
     public String getConsumerId() {

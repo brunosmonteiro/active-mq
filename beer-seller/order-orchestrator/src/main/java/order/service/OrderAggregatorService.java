@@ -21,7 +21,7 @@ public class OrderAggregatorService {
         final var orderProcessed = new OrderProcessedDto();
         final Map<Long, OrderProcessedBeerDto> beerMap = new HashMap<>();
         orderParts.forEach(orderPart -> {
-            orderProcessed.setOrderId(orderPart.getOrderId());
+            orderProcessed.setOrderAggregationId(orderPart.getOrderAggregationId());
             orderProcessed.setConsumerId(orderPart.getConsumerId());
             if (orderPart instanceof final InventoryValidationResponseDto orderInventory) {
                 fillInventoryOrder(orderInventory, beerMap);

@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import relay.entity.order.Order;
+import shared.constants.notification.NotificationMethod;
+import shared.constants.notification.NotificationStatus;
 
 @Entity
 public class Notification {

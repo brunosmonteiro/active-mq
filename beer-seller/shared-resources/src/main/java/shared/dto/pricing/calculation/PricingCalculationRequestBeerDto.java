@@ -8,7 +8,7 @@ public class PricingCalculationRequestBeerDto {
         return beerId;
     }
 
-    public void setBeerId(final Long beerId) {
+    public void setBeerId(Long beerId) {
         this.beerId = beerId;
     }
 
@@ -16,7 +16,8 @@ public class PricingCalculationRequestBeerDto {
         return quantity;
     }
 
-    public void setQuantity(final Integer quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }
+

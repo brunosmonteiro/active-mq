@@ -2,6 +2,7 @@ package order.service;
 
 import order.dto.OrderProcessedBeerDto;
 import order.dto.OrderProcessedDto;
+import order.mapper.OrderMapper;
 import order.producer.InventoryValidationProducer;
 import order.producer.OrderProducer;
 import order.producer.PricingCalculationProducer;
@@ -12,42 +13,44 @@ import shared.constants.inventory.InventoryValidationStatus;
 import shared.constants.order.OrderStatus;
 import shared.constants.pricing.PricingStatus;
 import shared.dto.order.creation.OrderBeerCreationDto;
-import shared.dto.order.creation.OrderCreationDto;
 import shared.dto.order.request.OrderRequestDto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public record OrderService(
         PricingCalculationProducer pricingCalculationProducer,
         InventoryValidationProducer inventoryValidationProducer,
+        OrderMapper orderMapper,
         OrderProducer orderProducer,
         OrderClient orderClient) {
 
     public void processOrder(final OrderRequestDto request) {
-//        inventoryValidationProducer.sendValidationRequest();
-//        pricingCalculationProducer.sendCalculationRequest();
+        final String orderAggregationId = UUID.randomUUID().toString();
+        inventoryValidationProducer.sendValidationRequest(
+            orderMapper.toInventoryValidationRequestDto(request, orderAggregationId));
+        pricingCalculationProducer.sendCalculationRequest(
+            orderMapper.toPricingCalculationRequestDto(request, orderAggregationId));
     }
 
-    public void createOrder(final OrderProcessedDto orderProcessedDto) {
-        final var orderCreation = new OrderCreationDto();
-        orderCreation.setOrderId(orderProcessedDto.getOrderId());
-        orderCreation.setConsumerId(orderProcessedDto.getConsumerId());
-        orderCreation.setTotalPrice(orderProcessedDto.getTotalPrice());
-        orderCreation.setBeers(getOrderBeers(orderProcessedDto.getBeers()));
+    public void createOrder(final OrderProcessedDto orderProcessed) {
+        final var orderCreation = orderMapper.toOrderCreationDto(orderProcessed);
+        setBeerStatuses(orderCreation.getBeers(), orderProcessed.getBeers());
         orderCreation.setStatus(getOrderStatus(orderCreation.getBeers()));
         orderClient.createOrder(orderCreation);
-//        orderProducer.sendOrder();
+        orderProducer.sendOrder(orderMapper.toOrderEventDto(orderProcessed.getBeers(), orderCreation));
     }
 
-    private List<OrderBeerCreationDto> getOrderBeers(final List<OrderProcessedBeerDto> beers) {
-        return beers.stream().map(beer -> {
-            final var orderBeer = new OrderBeerCreationDto();
-            orderBeer.setBeerId(beer.getBeerId());
-            orderBeer.setQuantity(beer.getQuantity());
-            orderBeer.setStatus(getBeerStatus(beer));
-            return orderBeer;
-        }).toList();
+    private void setBeerStatuses(
+            final List<OrderBeerCreationDto> beers,
+            final List<OrderProcessedBeerDto> orderProcessedBeers) {
+        final Map<Long, OrderProcessedBeerDto> orderProcessedBeerMap = orderProcessedBeers.stream()
+            .collect(Collectors.toMap(OrderProcessedBeerDto::getBeerId, Function.identity()));
+        beers.forEach(beer -> beer.setStatus(getBeerStatus(orderProcessedBeerMap.get(beer.getBeerId()))));
     }
 
     private OrderBeerStatus getBeerStatus(final OrderProcessedBeerDto beer) {

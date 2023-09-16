@@ -7,9 +7,9 @@ import java.util.List;
 
 public class InventoryValidationResponseDto extends OrderOrchestrationPartDto {
     public InventoryValidationResponseDto(
-            final Long orderId,
+            final String orderAggregationId,
             final String consumerId,
             final List< ? extends OrderBeerOrchestrationPart> beers) {
-        super(orderId, consumerId, beers);
+        super(orderAggregationId, consumerId, beers);
     }
 }

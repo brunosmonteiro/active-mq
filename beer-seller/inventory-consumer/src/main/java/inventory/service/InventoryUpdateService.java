@@ -9,6 +9,8 @@ import shared.constants.inventory.InventoryActionType;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.update.InventoryErrorDto;
 import shared.dto.inventory.update.InventoryUpdateDto;
+import shared.dto.order.event.OrderBeerEventDto;
+import shared.dto.order.event.OrderEventDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,7 @@ public record InventoryUpdateService(
             InventoryActionType.STOCK_UPDATE);
     }
 
-    public void consumeStock(final OrderResponseDto order) {
+    public void consumeStock(final OrderEventDto order) {
         final var inventoryBeers =
             inventoryClient.getInventoryBeersById(extractBeerIds(order));
         final Map<Long, InventoryBeerDto> updateDtoMap = mapIdsToInventoryBeers(inventoryBeers);
@@ -66,9 +68,9 @@ public record InventoryUpdateService(
         inventoryClient.updateInventories(inventoryUpdate);
     }
 
-    private List<InventoryUpdateDto> getUpdateList(final OrderResponseDto order) {
+    private List<InventoryUpdateDto> getUpdateList(final OrderEventDto order) {
         return order.getBeers().stream().map(beer ->
-            new InventoryUpdateDto(beer.getId(), beer.getQuantity())).toList();
+            new InventoryUpdateDto(beer.getBeerId(), beer.getQuantity())).toList();
     }
 
     private Set<String> extractBeerExternalIds(final List<InventoryUpdateDto> updateList) {
@@ -77,9 +79,9 @@ public record InventoryUpdateService(
             .collect(Collectors.toSet());
     }
 
-    private Set<Long> extractBeerIds(final OrderResponseDto orderResponseDto) {
-        return orderResponseDto.getBeers().stream()
-            .map(OrderBeerResponseDto::getId)
+    private Set<Long> extractBeerIds(final OrderEventDto order) {
+        return order.getBeers().stream()
+            .map(OrderBeerEventDto::getBeerId)
             .collect(Collectors.toSet());
     }
 

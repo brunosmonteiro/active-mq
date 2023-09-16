@@ -1,29 +1,27 @@
 package shared.dto.order.orchestration;
 
-import shared.dto.order.orchestration.OrderBeerOrchestrationPart;
-
 import java.util.List;
 
 public abstract class OrderOrchestrationPartDto {
-    protected Long orderId;
+    protected String orderAggregationId;
     protected String consumerId;
     protected List<? extends OrderBeerOrchestrationPart> beers;
 
     public OrderOrchestrationPartDto(
-            final Long orderId,
+            final String orderAggregationId,
             final String consumerId,
             final List<? extends OrderBeerOrchestrationPart> beers) {
-        this.orderId = orderId;
+        this.orderAggregationId = orderAggregationId;
         this.consumerId = consumerId;
         this.beers = beers;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public String getOrderAggregationId() {
+        return orderAggregationId;
     }
 
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
+    public void setOrderAggregationId(final String orderAggregationId) {
+        this.orderAggregationId = orderAggregationId;
     }
 
     public String getConsumerId() {

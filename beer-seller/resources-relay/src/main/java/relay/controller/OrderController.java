@@ -41,7 +41,13 @@ public class OrderController implements OrderClient {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public void createOrder(@RequestBody OrderCreationDto orderCreationDto) {
-        orderRepository.save(mapOrder(orderCreationDto));
+        final var order = new Order();
+        order.setConsumerId(orderCreationDto.getConsumerId());
+        orderCreationDto.getBeers().forEach(orderBeer -> {
+            final var beer = beerRepository.findById(orderBeer.getBeerId()).orElseThrow();
+            order.addOrderBeer(new OrderBeer(beer, orderBeer.getQuantity(), orderBeer.getStatus()));
+        });
+        orderRepository.save(order);
     }
 
     @GetMapping("/orders")
@@ -54,14 +60,4 @@ public class OrderController implements OrderClient {
 //    public OrderResponseDto getOrderDetail(@PathVariable final Long orderNumber) {
 //        return orderMapper.toOrderResponseDto(orderRepository.getReferenceById(orderNumber));
 //    }
-
-    private Order mapOrder(final OrderCreationDto orderCreationDto) {
-        final var order = new Order();
-        order.setConsumerId(orderCreationDto.getConsumerId());
-        orderCreationDto.getBeers().forEach(orderBeer -> {
-            final var beer = beerRepository.findById(orderBeer.getBeerId()).orElseThrow();
-            order.addOrderBeer(new OrderBeer(beer, orderBeer.getQuantity(), orderBeer.getStatus()));
-        });
-        return order;
-    }
 }
