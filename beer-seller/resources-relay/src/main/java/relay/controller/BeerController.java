@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import relay.mapper.BeerMapper;
 import relay.repository.BeerRepository;
 import shared.client.BeerClient;
-import shared.dto.beer.BeerCreationDto;
+import shared.dto.beer.BeerRegistryDto;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class BeerController implements BeerClient {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public void createBeer(@RequestBody final List<BeerCreationDto> beers) {
+    public void createBeer(@RequestBody final List<BeerRegistryDto> beers) {
         beerRepository.saveAll(beerMapper.toBeerList(beers));
     }
 }

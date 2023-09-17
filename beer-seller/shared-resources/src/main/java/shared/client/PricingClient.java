@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import shared.dto.pricing.PricingCreationDto;
+import shared.dto.pricing.PricingRegistryDto;
 import shared.dto.pricing.PricingInfoResponseDto;
 
 import java.util.List;
@@ -17,5 +17,5 @@ public interface PricingClient {
     List<PricingInfoResponseDto> getPricing(@RequestParam final Set<Long> beerIds);
 
     @PostMapping
-    void registerPrices(@RequestBody List<PricingCreationDto> pricingCreationDtoList);
+    void registerPrices(@RequestBody List<PricingRegistryDto> pricingCreationDtoList);
 }

@@ -7,8 +7,8 @@ import org.springframework.util.CollectionUtils;
 import shared.client.InventoryClient;
 import shared.constants.inventory.InventoryActionType;
 import shared.dto.inventory.InventoryBeerDto;
-import shared.dto.inventory.update.InventoryErrorDto;
 import shared.dto.inventory.update.InventoryUpdateDto;
+import shared.dto.inventory.update.InventoryErrorDto;
 import shared.dto.order.event.OrderBeerEventDto;
 import shared.dto.order.event.OrderEventDto;
 

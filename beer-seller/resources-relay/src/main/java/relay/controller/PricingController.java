@@ -14,7 +14,7 @@ import relay.mapper.PricingMapper;
 import relay.repository.BeerRepository;
 import relay.repository.PricingRepository;
 import shared.client.PricingClient;
-import shared.dto.pricing.PricingCreationDto;
+import shared.dto.pricing.PricingRegistryDto;
 import shared.dto.pricing.PricingInfoResponseDto;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class PricingController implements PricingClient {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public void registerPrices(@RequestBody final List<PricingCreationDto> pricingCreationDtoList) {
+    public void registerPrices(@RequestBody final List<PricingRegistryDto> pricingCreationDtoList) {
         final var prices = pricingCreationDtoList.stream().map(pricingDto ->
             new Pricing(
                 beerRepository.findById(pricingDto.getBeerId()).orElseThrow(),

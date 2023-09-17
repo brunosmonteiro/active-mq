@@ -1,9 +1,15 @@
 package shared.dto.beer;
 
-public class BeerCreationDto {
+public class BeerRegistryDto {
     private String externalId;
     private String name;
     private String description;
+
+    public BeerRegistryDto(final String externalId, final String name, final String description) {
+        this.externalId = externalId;
+        this.name = name;
+        this.description = description;
+    }
 
     public String getExternalId() {
         return externalId;

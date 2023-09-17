@@ -2,7 +2,7 @@ package shared.dto.pricing;
 
 import java.math.BigDecimal;
 
-public class PricingCreationDto {
+public class PricingRegistryDto {
     private Long beerId;
     private BigDecimal unitPrice;
 
