@@ -19,7 +19,7 @@ services:
       - "8161:8161"
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.9.2
     environment:
       - discovery.type=single-node
       - cluster.name=my_cluster_name

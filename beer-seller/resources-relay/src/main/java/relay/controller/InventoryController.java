@@ -2,6 +2,7 @@ package relay.controller;
 
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,7 +47,10 @@ public class InventoryController implements InventoryClient {
     public List<InventoryBeerDto> getInventoryBeers(
             @RequestParam(required = false) final Set<Long> beerIds,
             @RequestParam(required = false) final Set<String> beerExternalIds) {
-        return inventoryMapper.toInventoryBeerDtoList(inventoryRepository.findByBeerIds(beerIds));
+        if (!CollectionUtils.isEmpty(beerIds)) {
+            return inventoryMapper.toInventoryBeerDtoList(inventoryRepository.findByBeerIds(beerIds));
+        }
+        return inventoryMapper.toInventoryBeerDtoList(inventoryRepository.findByBeerExternalIds(beerExternalIds));
     }
 
     @Override

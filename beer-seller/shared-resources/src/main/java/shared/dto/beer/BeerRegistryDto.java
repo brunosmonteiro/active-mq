@@ -5,6 +5,9 @@ public class BeerRegistryDto {
     private String name;
     private String description;
 
+    public BeerRegistryDto() {
+    }
+
     public BeerRegistryDto(final String externalId, final String name, final String description) {
         this.externalId = externalId;
         this.name = name;

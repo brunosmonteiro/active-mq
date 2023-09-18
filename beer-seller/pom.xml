@@ -15,10 +15,10 @@
         <module>inventory-consumer</module>
         <module>notification-consumer</module>
         <module>order-orchestrator</module>
-        <module>destination-helper</module>
         <module>pricing-consumer</module>
         <module>beer-consumer</module>
         <module>error-consumer</module>
+        <module>destination-helper</module>
     </modules>
 
     <parent>

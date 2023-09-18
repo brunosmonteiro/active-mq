@@ -11,12 +11,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/beers")
 public record BeerController(BeerRegistryProducer beerRegistryProducer) {
-    @PostMapping("/external")
+    @PostMapping
     public void publishEvent() {
         final var registry = List.of(
             new BeerRegistryDto("BEER_001", "Mariana Monteiro", "Cerveja da Mariana Monteiro"),
-            new BeerRegistryDto("BEER_002", "Lili Wiggle", "Cerveja de Le Picles"),
-            new BeerRegistryDto("BEER_003", "Nina Pompona", "Cerveja Nina (Anau)"),
+            new BeerRegistryDto("BEER_002", "Lily Wiggle", "Cerveja de Le Picles"),
+            new BeerRegistryDto("BEER_003", "Nina Pompona", "Cerveja do Pão (Anau)"),
             new BeerRegistryDto("BEER_004", "Mumu", "Cerveja de Mu"),
             new BeerRegistryDto("BEER_005", "El Paton", "Cerveja do Pato"));
         beerRegistryProducer.sendMessage(registry);

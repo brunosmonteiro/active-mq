@@ -14,4 +14,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     @Query("SELECT i FROM Inventory i WHERE i.beer.id IN :beerIds")
     List<Inventory> findByBeerIds(final Set<Long> beerIds);
+
+    @Query("SELECT i FROM Inventory i WHERE i.beer.externalId IN :beerExternalIds")
+    List<Inventory> findByBeerExternalIds(final Set<String> beerExternalIds);
 }

@@ -55,9 +55,6 @@ public record InventoryUpdateService(
             final List<InventoryUpdateDto> inventoryUpdateDtoList,
             final Function<InventoryUpdateDto, InventoryBeerDto> beerFunction,
             final InventoryActionType inventoryActionType) {
-        if (CollectionUtils.isEmpty(inventoryBeerDtoList)) {
-            throw new IllegalArgumentException("Inventory Beers cannot be empty.");
-        }
         final List<InventoryErrorDto> errorList = new ArrayList<>();
         final var inventoryUpdate=
             prepareInventoryUpdate(beerFunction, inventoryUpdateDtoList, errorList);

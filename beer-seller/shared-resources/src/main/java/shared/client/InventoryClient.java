@@ -13,19 +13,18 @@ import shared.dto.inventory.update.InventoryUpdateDto;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(value = "InventoryClient", url = "${url.inventory}")
+@FeignClient(value = "InventoryClient", url = "${url.resources-relay}/inventories")
 public interface InventoryClient {
     @GetMapping
     List<InventoryBeerDto> getInventoryBeers(
-        @RequestParam final Set<Long> beerIds,
-        @RequestParam final Set<String> beerExternalIds);
+        @RequestParam(required = false) final Set<Long> beerIds,
+        @RequestParam(required = false) final Set<String> beerExternalIds);
 
-    default List<InventoryBeerDto> getInventoryBeersById(@RequestParam final Set<Long> beerIds) {
+    default List<InventoryBeerDto> getInventoryBeersById(final Set<Long> beerIds) {
         return getInventoryBeers(beerIds, null);
     }
 
-    default List<InventoryBeerDto> getInventoryBeersByExternalId(
-            @RequestParam final Set<String> beerExternalIds) {
+    default List<InventoryBeerDto> getInventoryBeersByExternalId(final Set<String> beerExternalIds) {
         return getInventoryBeers(null, beerExternalIds);
     }
 

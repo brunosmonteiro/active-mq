@@ -1,10 +1,8 @@
 package shared.dto.notification;
 
-import jakarta.persistence.Entity;
 import shared.constants.notification.NotificationMethod;
 import shared.constants.notification.NotificationStatus;
 
-@Entity
 public class NotificationCreationDto {
     private Long orderId;
     private String text;

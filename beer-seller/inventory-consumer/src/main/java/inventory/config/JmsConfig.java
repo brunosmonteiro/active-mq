@@ -65,7 +65,9 @@ public class JmsConfig {
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(final ConnectionFactory connectionFactory, final MessageConverter messageConverter){
+    public JmsTemplate jmsTemplate(
+            final ConnectionFactory connectionFactory,
+            final MessageConverter messageConverter){
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(connectionFactory);
         jmsTemplate.setPubSubDomain(false);
@@ -73,4 +75,3 @@ public class JmsConfig {
         return jmsTemplate;
     }
 }
-

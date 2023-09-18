@@ -1,9 +1,15 @@
 package shared.dto.inventory.update;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class InventoryUpdateDto {
     private String beerExternalId;
     private Long beerId;
     private Integer quantity;
+
+    public InventoryUpdateDto() {
+    }
 
     public InventoryUpdateDto(final Long beerId, final Integer quantity) {
         this.beerId = beerId;

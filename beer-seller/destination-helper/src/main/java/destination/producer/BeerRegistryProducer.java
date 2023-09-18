@@ -10,7 +10,7 @@ import java.util.List;
 public record BeerRegistryProducer(JmsTemplate jmsTemplate) {
     private static final String BEER_REGISTRY_QUEUE = "beer-registry-queue";
 
-    public void sendMessage(final List<BeerRegistryDto> beerRegistryDto) {
-        jmsTemplate.convertAndSend(BEER_REGISTRY_QUEUE, beerRegistryDto);
+    public void sendMessage(final List<BeerRegistryDto> registry) {
+        jmsTemplate.convertAndSend(BEER_REGISTRY_QUEUE, registry);
     }
 }

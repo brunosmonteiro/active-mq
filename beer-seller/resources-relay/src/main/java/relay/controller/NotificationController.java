@@ -42,7 +42,7 @@ public class NotificationController implements NotificationClient {
             @RequestBody final List<NotificationCreationDto> notificationCreationDtoList) {
         final var notifications = notificationCreationDtoList.stream().map(notificationCreationDto -> {
             final var notification = notificationMapper.toNotification(notificationCreationDto);
-            notification.setOrder(orderRepository.findByOrderId(notificationCreationDto.getOrderId()));
+            notification.setOrder(orderRepository.findById(notificationCreationDto.getOrderId()).orElseThrow());
             return notification;
         }).toList();
         notificationRepository.saveAll(notifications);

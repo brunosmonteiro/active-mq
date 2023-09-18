@@ -6,8 +6,6 @@ import org.apache.activemq.RedeliveryPolicy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.config.JmsListenerContainerFactory;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -37,12 +35,12 @@ public class JmsConfig {
     }
 
     @Bean
-    public JmsListenerContainerFactory<?> queueListenerFactory(
+    public DefaultJmsListenerContainerFactory queueListenerFactory(
             final ConnectionFactory connectionFactory,
             final MessageConverter messageConverter) {
         final var factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(false); // Set to false for queues
+        factory.setPubSubDomain(false);
         factory.setMessageConverter(messageConverter);
         factory.setSessionTransacted(true);
         return factory;

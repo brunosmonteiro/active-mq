@@ -8,9 +8,9 @@ import java.util.List;
 
 @Component
 public record InventoryRegistryProducer(JmsTemplate jmsTemplate) {
-    private static final String INVENTORY_CREATION_QUEUE = "inventory-creation-queue";
+    private static final String INVENTORY_STOCK_QUEUE = "inventory-stock-queue";
 
-    public void sendMessage(final List<InventoryUpdateDto> inventoryUpdateDto) {
-        jmsTemplate.convertAndSend(INVENTORY_CREATION_QUEUE, inventoryUpdateDto);
+    public void sendMessage(final List<InventoryUpdateDto> update) {
+        jmsTemplate.convertAndSend(INVENTORY_STOCK_QUEUE, update);
     }
 }

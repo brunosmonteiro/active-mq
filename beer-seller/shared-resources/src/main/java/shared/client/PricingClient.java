@@ -11,7 +11,7 @@ import shared.dto.pricing.PricingInfoResponseDto;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(value = "PricingClient", url = "${url.pricing}")
+@FeignClient(value = "PricingClient", url = "${url.resources-relay}")
 public interface PricingClient {
     @GetMapping
     List<PricingInfoResponseDto> getPricing(@RequestParam final Set<Long> beerIds);
