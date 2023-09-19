@@ -1,6 +1,5 @@
 package inventory.listener;
 
-import inventory.service.InventoryUpdateService;
 import inventory.service.InventoryValidationService;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;

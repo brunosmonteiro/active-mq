@@ -2,7 +2,7 @@ package destination.producer;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
-import shared.dto.inventory.update.InventoryUpdateDto;
+import shared.dto.inventory.update.InventoryUpsertDto;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public record InventoryRegistryProducer(JmsTemplate jmsTemplate) {
     private static final String INVENTORY_STOCK_QUEUE = "inventory-stock-queue";
 
-    public void sendMessage(final List<InventoryUpdateDto> update) {
+    public void sendMessage(final List<InventoryUpsertDto> update) {
         jmsTemplate.convertAndSend(INVENTORY_STOCK_QUEUE, update);
     }
 }

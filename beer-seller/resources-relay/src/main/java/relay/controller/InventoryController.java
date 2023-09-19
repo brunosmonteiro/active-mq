@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +17,7 @@ import relay.repository.InventoryRepository;
 import shared.client.InventoryClient;
 import shared.dto.inventory.InventoryBeerDto;
 import shared.dto.inventory.InventoryCreationDto;
-import shared.dto.inventory.update.InventoryUpdateDto;
+import shared.dto.inventory.update.InventoryUpsertDto;
 
 import java.util.List;
 import java.util.Map;
@@ -68,22 +67,22 @@ public class InventoryController implements InventoryClient {
     }
 
     @Override
-    @PutMapping
+    @PostMapping
     @Transactional
-    public void updateInventories(@RequestBody final List<InventoryUpdateDto> inventoryUpdateDtoList) {
+    public void upsertInventories(@RequestBody final List<InventoryUpsertDto> inventoryUpdateDtoList) {
         final var inventories = inventoryRepository.findByBeerIds(extractBeerIds(inventoryUpdateDtoList));
-        final Map<Long, InventoryUpdateDto> updateMap = mapBeerIdsInventoryUpdateDto(inventoryUpdateDtoList);
+        final Map<Long, InventoryUpsertDto> updateMap = mapBeerIdsInventoryUpdateDto(inventoryUpdateDtoList);
         inventories.forEach(inventory ->
             inventory.setQuantity(updateMap.get(inventory.getBeer().getId()).getQuantity()));
         inventoryRepository.saveAll(inventories);
     }
 
-    private Set<Long> extractBeerIds(final List<InventoryUpdateDto> inventoryUpdateDtoList) {
-        return inventoryUpdateDtoList.stream().map(InventoryUpdateDto::getBeerId).collect(Collectors.toSet());
+    private Set<Long> extractBeerIds(final List<InventoryUpsertDto> inventoryUpdateDtoList) {
+        return inventoryUpdateDtoList.stream().map(InventoryUpsertDto::getBeerId).collect(Collectors.toSet());
     }
 
-    private Map<Long, InventoryUpdateDto> mapBeerIdsInventoryUpdateDto(final List<InventoryUpdateDto> inventoryUpdateDtoList) {
+    private Map<Long, InventoryUpsertDto> mapBeerIdsInventoryUpdateDto(final List<InventoryUpsertDto> inventoryUpdateDtoList) {
         return inventoryUpdateDtoList.stream()
-            .collect(Collectors.toMap(InventoryUpdateDto::getBeerId, Function.identity()));
+            .collect(Collectors.toMap(InventoryUpsertDto::getBeerId, Function.identity()));
     }
 }

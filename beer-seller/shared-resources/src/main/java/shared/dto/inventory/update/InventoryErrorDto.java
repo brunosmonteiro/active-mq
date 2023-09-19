@@ -9,6 +9,19 @@ public class InventoryErrorDto {
     private String beerExternalId;
     private Integer requestedQuantity;
     private Integer availableQuantity;
+    private String details;
+
+    public InventoryErrorDto() {
+    }
+
+    public InventoryErrorDto(
+            final InventoryActionType actionType,
+            final String beerExternalId,
+            final String details) {
+        this.actionType = actionType;
+        this.beerExternalId = beerExternalId;
+        this.details = details;
+    }
 
     public InventoryActionType getActionType() {
         return actionType;
@@ -56,6 +69,14 @@ public class InventoryErrorDto {
 
     public void setAvailableQuantity(Integer availableQuantity) {
         this.availableQuantity = availableQuantity;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(final String details) {
+        this.details = details;
     }
 }
 

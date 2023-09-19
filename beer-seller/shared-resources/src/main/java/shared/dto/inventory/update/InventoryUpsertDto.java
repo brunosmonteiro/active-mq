@@ -3,20 +3,20 @@ package shared.dto.inventory.update;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InventoryUpdateDto {
+public class InventoryUpsertDto {
     private String beerExternalId;
     private Long beerId;
     private Integer quantity;
 
-    public InventoryUpdateDto() {
+    public InventoryUpsertDto() {
     }
 
-    public InventoryUpdateDto(final Long beerId, final Integer quantity) {
+    public InventoryUpsertDto(final Long beerId, final Integer quantity) {
         this.beerId = beerId;
         this.quantity = quantity;
     }
 
-    public InventoryUpdateDto(final String beerExternalId, final Integer quantity) {
+    public InventoryUpsertDto(final String beerExternalId, final Integer quantity) {
         this.beerExternalId = beerExternalId;
         this.quantity = quantity;
     }
