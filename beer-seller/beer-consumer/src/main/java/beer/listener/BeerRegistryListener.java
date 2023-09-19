@@ -15,6 +15,7 @@ import java.util.List;
 
 @Component
 public record BeerRegistryListener(BeerClient beerClient, ObjectMapper objectMapper) {
+
     @JmsListener(destination = "beer-registry-queue", containerFactory = "queueListenerFactory")
     public void createBeer(final Message message) throws JMSException, JsonProcessingException {
         final List<BeerRegistryDto> beerRegistryDtoList = objectMapper.readValue(
