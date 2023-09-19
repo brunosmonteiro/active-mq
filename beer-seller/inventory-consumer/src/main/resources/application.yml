@@ -1,0 +1,4 @@
+jms:
+  consumer:
+    orders:
+      clientId: inventory-consumer

@@ -1,7 +1,5 @@
 package order.dto;
 
-import shared.constants.order.OrderStatus;
-
 import java.math.BigDecimal;
 import java.util.List;
 

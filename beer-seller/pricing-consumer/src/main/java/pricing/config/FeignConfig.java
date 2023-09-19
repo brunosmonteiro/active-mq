@@ -1,10 +1,9 @@
-package error.config;
+package pricing.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import shared.config.FeignConfig;
 
 @Configuration
-@Import(FeignConfig.class)
-public class SharedConfigModule {
+@Import(shared.config.FeignConfig.class)
+public class FeignConfig {
 }

@@ -18,6 +18,7 @@
         <module>pricing-consumer</module>
         <module>beer-consumer</module>
         <module>error-consumer</module>
+        <module>order-displayer</module>
         <module>destination-helper</module>
     </modules>
 

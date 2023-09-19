@@ -5,3 +5,7 @@ spring:
       cluster-nodes: localhost:9200
       username: your_username
       password: your_password
+jms:
+  consumer:
+    orders:
+      clientId: error-consumer
