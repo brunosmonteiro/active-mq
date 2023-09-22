@@ -4,8 +4,6 @@ import shared.constants.order.OrderStatus;
 
 import java.util.List;
 
-import java.util.List;
-
 public class OrderEventDto {
     private Long orderId;
     private String consumerId;

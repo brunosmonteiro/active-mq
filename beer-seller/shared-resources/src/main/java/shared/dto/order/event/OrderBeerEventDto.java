@@ -4,8 +4,6 @@ import shared.constants.OrderBeerStatus;
 
 import java.math.BigDecimal;
 
-import java.math.BigDecimal;
-
 public class OrderBeerEventDto {
     private Long beerId;
     private Integer quantity;

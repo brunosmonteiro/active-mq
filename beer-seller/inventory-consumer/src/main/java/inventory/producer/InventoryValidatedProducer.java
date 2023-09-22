@@ -4,8 +4,6 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import shared.dto.inventory.validation.InventoryValidationResponseDto;
 
-import java.util.List;
-
 @Component
 public record InventoryValidatedProducer(JmsTemplate jmsTemplate) {
     private static final String INVENTORY_VALIDATED_QUEUE = "inventory-validated-queue";

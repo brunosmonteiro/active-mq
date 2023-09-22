@@ -28,8 +28,5 @@ public interface InventoryClient {
     }
 
     @PostMapping
-    void createInventory(@RequestBody final List<InventoryCreationDto> inventoryDtoList);
-
-    @PostMapping
     void upsertInventories(@RequestBody final List<InventoryUpsertDto> inventoryUpdateDto);
 }

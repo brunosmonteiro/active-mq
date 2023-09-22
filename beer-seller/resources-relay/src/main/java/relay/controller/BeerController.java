@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import relay.mapper.BeerMapper;
 import relay.repository.BeerRepository;
 import shared.client.BeerClient;
+import shared.dto.beer.BeerDto;
 import shared.dto.beer.BeerRegistryDto;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/beers")
@@ -31,5 +33,11 @@ public class BeerController implements BeerClient {
     @Transactional
     public void createBeer(@RequestBody final List<BeerRegistryDto> beers) {
         beerRepository.saveAll(beerMapper.toBeerList(beers));
+    }
+
+    @Override
+    public List<BeerDto> getBeers(Set<String> beerExternalIds, Set<Long> beerIds) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBeers'");
     }
 }

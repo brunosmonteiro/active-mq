@@ -84,11 +84,6 @@ public record InventoryUpsertService(
                 .collect(Collectors.toSet());
     }
 
-    private Map<String, InventoryBeerDto> mapExternalIdsToInventoryBeers(final List<InventoryBeerDto> inventoryBeers) {
-        return inventoryBeers.stream()
-                .collect(Collectors.toMap(InventoryBeerDto::getExternalId, Function.identity()));
-    }
-
     private Map<Long, InventoryBeerDto> mapIdsToInventoryBeers(final List<InventoryBeerDto> inventoryBeers) {
         return inventoryBeers.stream()
                 .collect(Collectors.toMap(InventoryBeerDto::getId, Function.identity()));
