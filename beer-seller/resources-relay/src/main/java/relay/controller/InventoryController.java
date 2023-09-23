@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.transaction.Transactional;
 import relay.mapper.InventoryMapper;
-import relay.repository.BeerRepository;
 import relay.repository.InventoryRepository;
 import shared.client.InventoryClient;
 import shared.dto.inventory.InventoryBeerDto;

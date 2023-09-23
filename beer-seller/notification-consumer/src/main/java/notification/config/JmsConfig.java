@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MessageConverter;
 import shared.config.JmsBaseConfig;
-import shared.config.JmsQueueListenerConfig;
 import shared.config.JmsTopicListenerFactory;
 
 @Configuration

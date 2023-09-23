@@ -2,9 +2,12 @@ package relay.controller;
 
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import relay.mapper.BeerMapper;
@@ -36,8 +39,13 @@ public class BeerController implements BeerClient {
     }
 
     @Override
-    public List<BeerDto> getBeers(Set<String> beerExternalIds, Set<Long> beerIds) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBeers'");
+    @GetMapping
+    public List<BeerDto> getBeers(
+            @RequestParam(required = false) final Set<String> beerExternalIds,
+            @RequestParam(required = false) final Set<Long> beerIds) {
+        if (!CollectionUtils.isEmpty(beerIds)) {
+            return beerMapper.toBeerDtoList(beerRepository.findAllById(beerIds));
+        }
+        return beerMapper.toBeerDtoList(beerRepository.findByExternalIdIn(beerExternalIds));
     }
 }
